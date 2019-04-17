@@ -6,38 +6,42 @@ import Login from './views/Login.vue'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   routes: [
     {
-      path: '/GymLog/',
+      path: '*',
+      redirect: '/'
+    },
+    {
+      path: '/',
       name: 'home',
       component: Home
     },
     {
-      path: 'GymLog',
+      path: '/login',
       name: 'login',
       component: Login
     },
     {
-      path: '/GymLog/about',
-      name: 'about',
+      path: '/excel-export',
+      name: 'excel-export',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: () => import(/* webpackChunkName: "about" */ './views/ExcelExport.vue')
     },
     {
-      path: '/GymLog/dashboard',
+      path: '/dashboard',
       name: 'dashboard',
       component: () => import('./views/Dashboard.vue')
     },
     {
-      path: '/GymLog/tables',
+      path: '/tables',
       name: 'tables',
       component: () => import('./views/Tables.vue')
     },
     {
-      path: '/GymLog/graphs',
+      path: '/graphs',
       name: 'graphs',
       component: () => import('./views/Graphs.vue')
     }
