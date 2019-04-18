@@ -1,15 +1,52 @@
 <template>
   <div class="graphs">
     <h1>This is an graphs page</h1>
-    <button class="btn btn-warning" @click="serverRequest('day')">Day</button>
-    <button class="btn btn-warning" @click="serverRequest('week')">Week</button>
-    <button class="btn btn-warning" @click="serverRequest('month')">Month</button>
+    <button @click="$store.commit('showLoading', true)">BOTON</button>
+    <div class="radio-container">
+      <span @click="serverRequest('day')"><RadioButtons :checked="true">Dia</RadioButtons></span>
+      <span @click="serverRequest('week')"><RadioButtons>Semana</RadioButtons></span>
+      <span @click="serverRequest('month')"><RadioButtons>Mes</RadioButtons></span>
+    </div>
+    <div class="checkbox-container-parent">
+      <div class="checkbox-container">
+        <div class="checkbox-title">Edad</div>
+        <CheckboxButtons :checked="true">Nulo</CheckboxButtons>
+        <CheckboxButtons :checked="true">0-20</CheckboxButtons>
+        <CheckboxButtons :checked="true">21-30</CheckboxButtons>
+        <CheckboxButtons :checked="true">31-40</CheckboxButtons>
+        <CheckboxButtons :checked="true">41-50</CheckboxButtons>
+        <CheckboxButtons :checked="true">51+</CheckboxButtons>
+      </div>
+      <div class="checkbox-container">
+        <div class="checkbox-title">Ocupación</div>
+        <CheckboxButtons :checked="true">Nulo</CheckboxButtons>
+        <CheckboxButtons :checked="true">Emprendedor</CheckboxButtons>
+        <CheckboxButtons :checked="true">Empleado</CheckboxButtons>
+        <CheckboxButtons :checked="true">Estudiante</CheckboxButtons>
+        <CheckboxButtons :checked="true">Otro</CheckboxButtons>
+      </div>
+      <div class="checkbox-container">
+        <div class="checkbox-title">Sexo</div>
+        <CheckboxButtons :checked="true">M</CheckboxButtons>
+        <CheckboxButtons :checked="true">F</CheckboxButtons>
+      </div>
+    </div>
+
     <br><br>
     <div class="chart-container">
       <BarChart :chartData="datacollection1" :options="options1" :change="change"></BarChart>
       <div> {{ axis1 }} </div>
     </div>
     <hr>
+    <div class="radio-container">
+      <CheckboxButtons :checked="true">Lun</CheckboxButtons>
+      <CheckboxButtons :checked="true">Mar</CheckboxButtons>
+      <CheckboxButtons :checked="true">Mie</CheckboxButtons>
+      <CheckboxButtons :checked="true">Jue</CheckboxButtons>
+      <CheckboxButtons :checked="true">Vie</CheckboxButtons>
+      <CheckboxButtons :checked="true">Sab</CheckboxButtons>
+      <CheckboxButtons :checked="true">Dom</CheckboxButtons>
+    </div>
     <div class="chart-container">
       <LineChart :chartData="datacollection2" :options="options1" :change="change"></LineChart>
       <div> {{ axis2 }} </div>
@@ -31,6 +68,8 @@
 import axios from 'axios'
 import LineChart from '../components/charts/Line.vue'
 import BarChart from '../components/charts/Bar.vue'
+import CheckboxButtons from '../components/CheckboxButtons.vue'
+import RadioButtons from '../components/RadioButtons.vue'
 import { constants } from 'fs';
 
 export default {
@@ -144,14 +183,18 @@ export default {
   },
   components: {
     LineChart,
-    BarChart
+    BarChart,
+    CheckboxButtons,
+    RadioButtons
   },
   methods:{
     serverRequest (x){
+      $store.commit('showLoading', true)
       axios.post('php/testeando_v6.php', {
         'x': x
         })
         .then(res => {
+          $store.commit('showLoading', false)
           console.log(res.data.graph1)
           //graph1
           this.axis1 = this.axis(x)
@@ -202,7 +245,8 @@ export default {
           this.change++
         })
         .catch(error => {
-            console.log(error)
+          $store.commit('showLoading', false)
+          console.log(error)
         })
     },
     axis(x){
@@ -239,15 +283,38 @@ export default {
 </script>
 
 <style scoped>
+.radio-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.checkbox-container-parent{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.checkbox-container{
+  display: flex;
+  flex-direction: column;
+  margin: 3px 5px;
+  align-items: start;
+}
 .chart-container{
   margin: 0 10px;
   padding-top: 20px;
+}
+.checkbox-title{
+  font-weight: bold;
+  margin-left: 15px;
 }
 @media only screen and (min-width: 600px) {
   .chart-container{
     margin: 0 100px;
     padding-top: 50px;
   }
+  .checkbox-container{
+  margin: 3px 15px;
+}
 }
 </style>
 

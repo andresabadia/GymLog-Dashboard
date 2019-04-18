@@ -8,8 +8,18 @@
       <router-link to="/graphs">Graphs</router-link>
     </div>
     <router-view/>
+    <loading v-if="$store.state.loading"></loading>
   </div>
 </template>
+<script>
+import Loading from './components/Loading.vue'
+export default {
+  components:{
+    Loading
+  }
+}
+</script>
+
 
 <style>
 #app {
