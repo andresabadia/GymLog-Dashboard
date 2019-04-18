@@ -51,14 +51,19 @@
         <div class="chart-title">Accesos vigentes</div>       
       </div>    
     </div>
-    <br><br>
-    <button class="btn btn-warning" @click="donutChart(age_group)">Age Group</button>
+    <br>
+    <div class="radio-buttons-container">
+      <span @click="donutChart('age_group')"><RadioButtons :checked="true">Edades</RadioButtons></span>
+      <span @click="donutChart('gender')"><RadioButtons>Sexo</RadioButtons></span>
+      <span @click="donutChart('occupation')"><RadioButtons>Ocupación</RadioButtons></span>
+    </div>
    
   </div>
 </template>
 <script>
 import axios from 'axios'
 import DonutChart from '../components/charts/Donut.vue'
+import RadioButtons from '../components/RadioButtons.vue'
 export default {
   data(){
     return{
@@ -106,6 +111,9 @@ export default {
       change: 0,
     }
   },
+  created(){
+    this.donutChart('age_group')
+  },
   methods:{
     roundUp(value){
       return Math.round(value)
@@ -122,7 +130,7 @@ export default {
         'colors': colors
       })
       .then(res => {
-        console.log(res.data.graph1)
+        console.log(res)
         //graph1
         this.datacollection1.labels = []
         this.datacollection1.datasets[0].data=[]
@@ -164,10 +172,10 @@ export default {
         console.log(error)
       })
     }
-
   },
   components: {
-    DonutChart
+    DonutChart,
+    RadioButtons
   },
   filters:{
     roundUpFilter: value => {
@@ -177,6 +185,9 @@ export default {
 }
 </script>
 <style scoped>
+button{
+  margin: 0 5px;
+}
 .dashboard{
   width: 100%;
   padding: 0px 40px;
@@ -292,5 +303,10 @@ export default {
   }
 }
 @media only screen and (min-width: 1200px) {  
+}
+.radio-buttons-container{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 </style>

@@ -6,7 +6,7 @@
     <button class="btn btn-warning" @click="serverRequest('month')">Month</button>
     <br><br>
     <div class="chart-container">
-      <LineChart :chartData="datacollection1" :options="options1" :change="change"></LineChart>
+      <BarChart :chartData="datacollection1" :options="options1" :change="change"></BarChart>
       <div> {{ axis1 }} </div>
     </div>
     <hr>
@@ -16,7 +16,7 @@
     </div>
     <hr>
     <div class="chart-container">
-      <LineChart :chartData="datacollection3" :options="options2" :change="change"></LineChart>
+      <BarChart :chartData="datacollection3" :options="options2" :change="change"></BarChart>
       <div> {{ axis3 }} </div>
     </div>
     <hr>
@@ -30,6 +30,7 @@
 <script>
 import axios from 'axios'
 import LineChart from '../components/charts/Line.vue'
+import BarChart from '../components/charts/Bar.vue'
 import { constants } from 'fs';
 
 export default {
@@ -40,7 +41,7 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: '#ffab0070',
+            backgroundColor: '#ffab00',
             data: [40, 20, 30, 50, 20]
           }
           // {
@@ -55,7 +56,8 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: '#ffab0070',
+            backgroundColor: '#ffab0070',           
+            borderColor: '#ffab00',
             data: [40, 20, 30, 50, 20]
           }
         ]
@@ -64,16 +66,20 @@ export default {
         labels: ['January', 'February', 'March', 'April','May'],
         datasets: [
           {
-            yAxisID: 'y1',
-            label: 'Data One',
-            backgroundColor: '#ffab0070',
-            data: [40, 20, 30, 50, 20]
-          },
-          {
             yAxisID: 'y2',
             label: 'Data Two',
-            backgroundColor: '#42424270',
-            data: [25, 30, 35, 32, 17]
+            backgroundColor: '#616161',
+            borderColor: '#616161',
+            data: [25, 30, 35, 32, 17],
+            type: 'line',
+            lineTension: 0,
+            fill: false
+          },
+          {
+            yAxisID: 'y1',
+            label: 'Data One',
+            backgroundColor: '#ffab00',
+            data: [40, 20, 30, 50, 20]
           }
         ]
       },
@@ -83,14 +89,18 @@ export default {
           {
             yAxisID: 'y1',
             label: 'Data One',
-            backgroundColor: '#ffab0070',
-            data: [40, 20, 30, 50, 20]
+            backgroundColor: '#ffab0070',            
+            borderColor: '#ffab00',
+            data: [40, 20, 30, 50, 20],
+            lineTension: 0.1,
           },
           {
             yAxisID: 'y2',
             label: 'Data Two',
-            backgroundColor: '#42424270',
-            data: [25, 30, 35, 32, 17]
+            backgroundColor: '#61616170',            
+            borderColor: '#616161',
+            data: [25, 30, 35, 32, 17],
+            lineTension: 0.1,
           }
         ]
       },
@@ -133,7 +143,8 @@ export default {
     }
   },
   components: {
-    LineChart
+    LineChart,
+    BarChart
   },
   methods:{
     serverRequest (x){
