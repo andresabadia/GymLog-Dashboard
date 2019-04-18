@@ -1,9 +1,9 @@
 <template>
   <div class="graphs">
     <h1>This is an graphs page</h1>
-    <button @click="serverRequest('day')">Day</button>
-    <button @click="serverRequest('week')">Week</button>
-    <button @click="serverRequest('month')">Month</button>
+    <button class="btn btn-warning" @click="serverRequest('day')">Day</button>
+    <button class="btn btn-warning" @click="serverRequest('week')">Week</button>
+    <button class="btn btn-warning" @click="serverRequest('month')">Month</button>
     <br><br>
     <div class="chart-container">
       <LineChart :chartData="datacollection1" :options="options1" :change="change"></LineChart>
@@ -25,11 +25,6 @@
       <div> {{ axis4 }} </div>
     </div>
     
-    
-    
-    <button @click="fillData()">Randomize</button>
-    <!-- <button @click="increase()">Increase height</button> -->
-    <div><br><br> {{serverResponse}} </div>
   </div>
 </template>
 <script>
@@ -45,7 +40,7 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: '#f8797970',
+            backgroundColor: '#ffab0070',
             data: [40, 20, 30, 50, 20]
           }
           // {
@@ -60,7 +55,7 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: '#f8797970',
+            backgroundColor: '#ffab0070',
             data: [40, 20, 30, 50, 20]
           }
         ]
@@ -71,13 +66,13 @@ export default {
           {
             yAxisID: 'y1',
             label: 'Data One',
-            backgroundColor: '#f8797970',
+            backgroundColor: '#ffab0070',
             data: [40, 20, 30, 50, 20]
           },
           {
             yAxisID: 'y2',
             label: 'Data Two',
-            backgroundColor: '#79f8d070',
+            backgroundColor: '#42424270',
             data: [25, 30, 35, 32, 17]
           }
         ]
@@ -88,13 +83,13 @@ export default {
           {
             yAxisID: 'y1',
             label: 'Data One',
-            backgroundColor: '#f8797970',
+            backgroundColor: '#ffab0070',
             data: [40, 20, 30, 50, 20]
           },
           {
             yAxisID: 'y2',
             label: 'Data Two',
-            backgroundColor: '#79f8d070',
+            backgroundColor: '#42424270',
             data: [25, 30, 35, 32, 17]
           }
         ]
@@ -142,8 +137,8 @@ export default {
   },
   methods:{
     serverRequest (x){
-      axios.post('php/testeando_v5.php', {
-        'x': x,
+      axios.post('php/testeando_v6.php', {
+        'x': x
         })
         .then(res => {
           console.log(res.data.graph1)
@@ -232,7 +227,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .chart-container{
   margin: 0 10px;
   padding-top: 20px;
