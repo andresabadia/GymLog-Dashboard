@@ -16,6 +16,10 @@ import Loading from './components/Loading.vue'
 export default {
   components:{
     Loading
+  },
+  created(){      
+    console.log('App created check user id')  
+    this.$store.commit('checkUserId')
   }
 }
 </script>

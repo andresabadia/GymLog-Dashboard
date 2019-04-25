@@ -1,14 +1,24 @@
 <template>
-    <label class="checkbox-container"><slot></slot>
-      <input type="checkbox" :value="value" :checked="value?'checked':''" @input="$emit('input', $event.target.checked)">
-      <span class="checkmark"></span>
-    </label>
+  <label class="checkbox-container"><slot></slot>
+    <input type="checkbox" :value="value" :checked="value?'checked':''" @input="$emit('input', $event.target.checked)">
+    <span class="checkmark"></span>
+  </label>
 </template>
 <script>
 export default {
     props:[
         'value'
-    ]
+    ],
+    data(){
+      return{
+        textTest:true
+      }
+    },
+    methods:{
+      testMethod(e){
+        console.log(e)
+      }
+    }
 }
 </script>
 <style scoped>

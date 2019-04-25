@@ -13,6 +13,16 @@ export default {
   name: 'home',
   components: {
     HelloWorld
+  },
+  created(){
+    console.log('home created, userID: ' + this.$store.state.userId)
+    
+    this.$store.commit('checkUserId')
+    if(this.$store.state.userId){
+      this.$router.push('dashboard')
+    } else {
+      this.$router.push('login')
+    }
   }
 }
 </script>
