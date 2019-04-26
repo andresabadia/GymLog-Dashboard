@@ -2,23 +2,41 @@
   <div class="about">
     <h1>This is an tables page</h1>
     <p>{{date('2019-04-25 21:59:12.718')}} - {{formatedDate('2019-04-25 21:59:12.718')}}</p>
-    <Chart></Chart>
+    <Chart :type="'line'"></Chart>
+    <Chart></Chart>    
+    <Chart :data="datacollection3" :change="change"></Chart>
   </div>
 </template>
 <script>
-// var moment = require('moment');
-// var x = moment().format()
-import EmmaLouise from '../components/charts/EmmaLouise.vue'
 import Chart from '../components/charts/Chart.vue'
 export default {
   data(){
     return{
-      // chartDataProp,
-      // chartLabelsProp
+      datacollection3: {
+                labels: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8],
+                datasets: [
+                {
+                    yAxisID: 'y2',
+                    label: 'Data Two',
+                    backgroundColor: '#616161',
+                    borderColor: '#616161',
+                    data: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8],
+                    type: 'line',
+                    lineTension: 0,
+                    fill: false
+                },
+                {
+                    yAxisID: 'y1',
+                    label: 'Data One',
+                    backgroundColor: '#ffab00',
+                    data: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8]
+                }
+                ]
+            },
+            change:0
     }
   },
   components:{
-    EmmaLouise,
     Chart
   },
   methods:{

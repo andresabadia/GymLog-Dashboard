@@ -1,27 +1,29 @@
 <template>
-    <div class="chart-overall-container">
-        <div class="chart-title">Title</div>
+    <div class="chart-overall-container" @dbclick="resizeChart()">
+        <div class="chart-title"><slot></slot></div>
         <div class="chart-elements-container">
-            <div class="chart-y1-axis" :style="'width:'+y1Width+'px'">
-                <div class="chart-container" :style="'width:' + width + 'px'">
+            <div class="chart-y1-axis" :style="'width:'+y1Width+'px; height:'+height+'px'">
+                <div :class="classId" class="chart-container" :style="'width:' + widthDefault + 'px; height:'+height+'px'">
                     <BarChart :chartData="chartData(true)" :options="chartOptions(true)" :change="change" v-if="chartType"></BarChart>
                     <LineChart :chartData="chartData(true)" :options="chartOptions(true)" :change="change" v-else></LineChart>
                 </div>
             </div>
-            <div class="chart-scroll-container">
-                <div class="chart-container" :style="'width:' + width + 'px'">
+            <div :id="id" class="chart-scroll-container">
+                <div :class="classId" class="chart-container" :style="'width:' + widthDefault + 'px; height:'+height+'px'">
                     <BarChart :chartData="chartData()" :options="chartOptions()" :change="change" v-if="chartType"></BarChart>
                     <LineChart :chartData="chartData()" :options="chartOptions()" :change="change" v-else></LineChart>
                 </div>
             </div>
-            <div class="chart-y2-axis" :style="'width:'+y2Width+'px'" v-if="y2Axis">
-                <div class="chart-container" :style="'width:' + width + 'px'">
+            <div class="chart-y2-axis" :style="'width:'+y2Width+'px; height:'+height+'px'" v-if="y2Axis">
+                <div :class="classId" class="chart-container" :style="'width:' + widthDefault + 'px; height:'+height+'px'">
                     <BarChart :chartData="chartData(true)" :options="chartOptions(true)" :change="change" v-if="chartType"></BarChart>
                     <LineChart :chartData="chartData(true)" :options="chartOptions(true)" :change="change" v-else></LineChart>
                 </div>
             </div>
         </div>
-        <div class="chart-legend">legend</div>
+        <div class="chart-legend">
+            <div v-for="(dataset) in chartData().datasets" :key="dataset" class="chart-legend-child"><div :style="'margin:0 5px; height:13px; width:13px; background:'+dataset.backgroundColor+';'"></div><div>{{dataset.label}}</div></div>
+        </div>
     </div>
 </template>
 
@@ -31,36 +33,15 @@ import LineChart from './Line.vue'
 export default {
     data(){
         return{
-            y1Width:200,
-            y2Width:200,
-            // datacollectionDefault: {
-            //     labels: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8],
-            //     datasets: [
-            //     {
-            //         label: 'Data One',
-            //         backgroundColor: '#ffab00',
-            //         data: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8]
-            //     }
-            //     ]
-            // },
+            y1Width:40,
+            y2Width:40,
             datacollectionDefault: {
-                labels: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8],
+                labels: [3,4,5,1,2,3],
                 datasets: [
                 {
-                    yAxisID: 'y2',
-                    label: 'Data Two',
-                    backgroundColor: '#616161',
-                    borderColor: '#616161',
-                    data: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8],
-                    type: 'line',
-                    lineTension: 0,
-                    fill: false
-                },
-                {
-                    yAxisID: 'y1',
                     label: 'Data One',
                     backgroundColor: '#ffab00',
-                    data: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8]
+                    data: [3,4,5,1,2,3]
                 }
                 ]
             },
@@ -100,24 +81,43 @@ export default {
                     }]        
                 }
             },
-            y2Axis:false
+            y2Axis:false,
+            id:'',
+            classId:'',
+            widthDefault:2500
         }
     },
     props:[
-        'id',
         'change',
         'data',
         'options',
-        'type'
+        'type',
+        'width',
+        'height',
+        'displayQuantity'
     ],
     components:{
         BarChart,
         LineChart
     },
-    computed:{
-        width(){
-            return 2500
+    watch: {
+        change() {
+            // this.id = this.makeUniqueID()
+            this.setSizes()
         },
+        width(){
+            this.widthDefault=this.width
+            this.setSizes()
+        }
+    },
+    created(){
+        this.id = this.makeUniqueID()
+        this.classId = this.makeUniqueID()
+    },
+    mounted(){        
+        this.setSizes()
+    },
+    computed:{
         chartType(){
             if(this.type==undefined || this.type=='bar'){
                 return true
@@ -127,23 +127,54 @@ export default {
         }
     },
     methods:{
+        setSizes(){
+            let displayQuantity = this.chartQuantity()
+            let scrollContainer = document.getElementById(this.id)
+            let dataSize = this.chartData().labels.length
+            if(dataSize>displayQuantity){
+                this.widthDefault = scrollContainer.offsetWidth * dataSize / displayQuantity
+            } else {
+                this.widthDefault = scrollContainer.offsetWidth
+            }
+            this.responsiveChart()
+        },
+        responsiveChart(){
+            let chartContainers = document.getElementsByClassName(this.classId)
+            for(let i=0; i<chartContainers.length; i++){
+                chartContainers[i].firstElementChild.style.position = 'relative'
+                chartContainers[i].firstElementChild.style.width = this.widthDefault + 'px'
+                chartContainers[i].firstElementChild.style.height = this.height + 'px'
+            }
+            document.getElementById(this.id).scrollLeft = document.getElementById(this.id).scrollWidth
+        },
+        chartQuantity(){
+            if(this.displayQuantity == undefined){
+                return 30
+            } else {
+                return this.displayQuantity
+            }
+        },
         chartData(axis){
             let jsonString
             let json
             if(this.data == undefined){
                 jsonString = JSON.stringify(this.datacollectionDefault)
+                // json = this.datacollectionDefault
             } else {
-                jsonString = JSON.stringify(this.data)                
+                jsonString = JSON.stringify(this.data)
+                // json = this.data           
             }
             json = JSON.parse(jsonString)            
             if(json.datasets.length>1){
                 this.y2Axis = true
+            } else {
+                this.optionsDefault.scales.yAxes[1].gridLines.display = false
             }
             if(axis){ //axis set to true set backgroundColor transparent
-                for(let i=0; i<json.datasets.length; i++){
-                    json.datasets[i].backgroundColor = '#ffab0000'
-                    json.datasets[i].borderColor = '#ffab0000'
-                }
+                json.datasets.forEach(element => {
+                    element.backgroundColor = '#ffab0000'
+                    element.borderColor = '#ffab0000'
+                })
             }           
             return json
         },
@@ -152,25 +183,37 @@ export default {
             let json
             if(this.options == undefined){
                 jsonString = JSON.stringify(this.optionsDefault)
+                // json = this.optionsDefault
             } else {
-                jsonString = JSON.stringify(this.options)                
+                jsonString = JSON.stringify(this.options)  
+                // json = this.options              
             }
             json = JSON.parse(jsonString)
             if(axis){ 
-                for(let i=0; i<json.scales.yAxes.length; i++){
-                    json.scales.yAxes[i].gridLines.color='#00000000'   
-                    json.scales.yAxes[i].gridLines.zeroLineColor='#00000000'
-                }
-                for(let i=0; i<json.scales.xAxes.length; i++){
-                    json.scales.xAxes[i].gridLines.color='#00000000'  
-                    json.scales.xAxes[i].ticks.fontColor='#00000000' 
-                }      
+                json.scales.yAxes.forEach(element=>{
+                    element.gridLines.color='#00000000'
+                    element.gridLines.zeroLineColor='#00000000'
+                })
+                json.scales.xAxes.forEach(element=>{
+                    element.gridLines.color='#00000000'
+                    element.gridLines.zeroLineColor='#00000000'
+                    element.ticks.fontColor='#00000000'
+                })     
             } else {
                 json.scales.yAxes[0].ticks.fontColor='#00000000' 
                 json.scales.yAxes[1].ticks.fontColor='#00000000' 
             }
             return json
-        }
+        },
+        makeUniqueID(){
+            let text = "";
+            let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (let i = 0; i < 8; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text + new Date().getTime().toString(36);
+            },
     }
 }
 </script>
@@ -188,15 +231,23 @@ export default {
 }
 .chart-elements-container{
     display:flex;
+    position: relative;
 }
 .chart-container{
 
 }
 .chart-y1-axis, .chart-y2-axis{
-    position: relative;
+    position: absolute;
     overflow: hidden;
     flex-grow: 0;
     flex-shrink: 0;
+    z-index:2;
+}
+.chart-y1-axis{
+    left: -5px;
+}
+.chart-y2-axis{
+    right: 0;
 }
 .chart-y2-axis > div{
     position: absolute;
@@ -207,6 +258,14 @@ export default {
     overflow-x: auto;
 }
 .chart-legend{
-
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.chart-legend-child{
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
 }
 </style>

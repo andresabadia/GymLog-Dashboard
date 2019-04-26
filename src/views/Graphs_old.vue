@@ -40,19 +40,39 @@
           <button class="btn btn-warning" @click="changeJSON()">Aplicar filtros</button>
         </div>
         
-        <p>Width: {{windowWidth}} - Height: {{windowHeight}}</p> 
-        <div>
-          <Chart :data="datacollection3" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Pagos</Chart>
+        <Chart :data="datacollection3" :options="options3" :change="change"></Chart>
+
+        <h2>Pagos</h2>
+        <div class="graphs-container-parent" @scroll="getScrollPosition3($event)">
+          <div class="graphs-container" :style="'width:'+displaySize+'px'">
+            <BarChart :chartData="datacollection1" :options="options1" :change="change"></BarChart>
+          </div>
+          <div> {{ axis3 }} </div>
         </div>
         <hr>
-        <div>
-          <Chart :data="datacollection4" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity" :type="'line'">Ingresos en USD y Accesos vigentes</Chart>
+        <h2>Ingresos en USD y Accesos vigentes</h2>
+        <div class="graphs-container-parent" @scroll="getScrollPosition($event)">
+          <div class="graphs-container">
+            <LineChart :chartData="datacollection4" :options="options4" :change="change"></LineChart>
+          </div>
+          <div> {{ axis4 }} </div>
         </div>
         <hr>
-        <div>
-          <Chart :data="datacollection1" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Visitas</Chart>
+        <h2>Visitas</h2>
+        <div class="graphs-container-parent" style="position:relative; overflow-x:hidden">
+          <div class="graphs-container-scroll" :style="'width:'+displaySizeScroll+'px'" style=" position:absolute; top:0; left:30px; z-index:10; overflow-x:auto">
+            <div class="graphs-container" :style="'width:'+displaySize+'px'">
+              <BarChart :chartData="datacollection1" :options="options1" :change="change"></BarChart>
+            </div>
+          </div>           
+          <div class="graphs-container" :style="'width:'+displaySize+'px'" style=" position:absolute; top:0; left:0; z-index:5">
+            <BarChart :chartData="datacollectionAxis1" :options="optionsAxis1" :change="change"></BarChart>
+          </div>         
+          <canvas id="axis-Test" height="300" width="0"></canvas>
+          <div> {{ axis1 }} </div>
         </div>
         <hr>
+        <h2>Visitas promedio por dia</h2>
         <div class="checkbox-button-container-horizontal">      
           <CheckboxButtons v-model="selection.day_mon">Lun</CheckboxButtons>
           <CheckboxButtons v-model="selection.day_tue">Mar</CheckboxButtons>
@@ -65,9 +85,12 @@
         <div>
           <button class="btn btn-warning" @click="changeJSON()">Aplicar filtros</button>
         </div>
-        <div>
-          <Chart :data="datacollection2" :change="change" :width="width" :height="height" :displayQuantity="30" :type="'line'">Visitas promedio por dia</Chart>
-        </div>        
+        <div class="graphs-container-parent">
+          <div class="graphs-container">
+            <LineChart :chartData="datacollection2" :options="options2" :change="change"></LineChart>
+          </div>
+          <div> {{ axis2 }} </div>
+        </div>
       </div>
     </div>
     
@@ -85,17 +108,6 @@ import { constants } from 'fs';
 export default {
   data(){
     return{
-      datacollectionTest: {
-                labels: [3,4,5,1,2,3],
-                datasets: [
-                {
-                    label: 'Data One',
-                    backgroundColor: '#ffab00',
-                    data: [3,4,5,1,2,3]
-                }
-                ]
-            },
-      
       datacollection1: {
         labels: [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5],
         datasets: [
@@ -126,18 +138,7 @@ export default {
             data: []
           }
         ]
-      },      
-            datacollectionTest2: {
-                labels: [],
-                datasets: [
-                {
-                    label: 'Data One',
-                    backgroundColor: '#ffab0070',
-                    borderColor: '#ffab00',
-                    data: []
-                }
-                ]
-            },
+      },
       datacollection3: {
         labels: [],
         datasets: [
@@ -165,7 +166,7 @@ export default {
           {
             yAxisID: 'y1',
             label: 'Data One',
-            backgroundColor: '#ffab0070',
+            backgroundColor: '#ffab0070',            
             borderColor: '#ffab00',
             data: [],
             lineTension: 0.1,
@@ -173,34 +174,13 @@ export default {
           {
             yAxisID: 'y2',
             label: 'Data Two',
-            backgroundColor: '#61616170',
+            backgroundColor: '#61616170',            
             borderColor: '#616161',
             data: [],
             lineTension: 0.1,
           }
         ]
       },
-      datacollectionTest4: {
-                labels: [],
-                datasets: [
-                {
-                    yAxisID: 'y1',
-                    label: 'Data One',
-                    backgroundColor: '#ffab0070',            
-                    borderColor: '#ffab00',
-                    data: [],
-                    lineTension: 0.1,
-                },
-                {
-                    yAxisID: 'y2',
-                    label: 'Data Two',
-                    backgroundColor: '#61616170',            
-                    borderColor: '#616161',
-                    data: [],
-                    lineTension: 0.1,
-                }
-                ]
-            },
       options1: {
         legend:{
           display:false
@@ -367,13 +347,7 @@ export default {
       },
       displayQuantity: 30,
       displaySize: 500,
-      displaySizeScroll: 500,
-      
-      width: 2500,
-      height: 350,
-      
-      windowWidth: 0,
-      windowHeight: 0,
+      displaySizeScroll: 500
     }
   },
   components: {
@@ -383,73 +357,24 @@ export default {
     CheckboxButtons,
     RadioButtons
   },
-  watch: {
-    displayQuantity() { 
-      this.change++
-    },
-    height(){
-      this.change++
-    }
-  },
   created(){
     this.changeJSON()
   },
   mounted(){
-    this.$nextTick(function() {
-            window.addEventListener('resize', this.getWindowWidth);
-            window.addEventListener('resize', this.getWindowHeight);
-
-            //Init
-            this.getWindowWidth()
-            this.getWindowHeight()
-            })
-    // this.getSizes()
+    this.getSizes()
   },
-    beforeDestroy() {
-        window.removeEventListener('resize', this.getWindowWidth);
-        window.removeEventListener('resize', this.getWindowHeight);
-    },
   methods:{
-    getWindowWidth(event) {
-      this.windowWidth = document.documentElement.clientWidth;
-      this.changeDisplayQuantity()
+    getScrollPosition1(e){
+      console.log(e.target.scrollLeft)
+      this.options1.scales.yAxes[0].ticks.padding = (e.target.scrollLeft+10)*-1
+      this.options1.animation=false
+      this.change++
     },
-    getWindowHeight(event) {
-      this.windowHeight = document.documentElement.clientHeight;
-      this.changeChartHeight()
-    },
-    changeDisplayQuantity(){
-      this.width = this.windowWidth
-      if(this.windowWidth < 576){
-        this.displayQuantity = 25
-      } else if(this.windowWidth < 768 && this.windowWidth >= 576){
-        this.displayQuantity = 30
-      } else if(this.windowWidth < 992 && this.windowWidth >= 768){
-        this.displayQuantity = 40
-      } else if(this.windowWidth >= 992){
-        this.displayQuantity = 60
-      }
-      // this.change++
-    },
-    changeChartHeight(){
-      if(this.windowHeight < 500){
-        this.height = this.windowHeight - 100
-      } else {
-        this.height=400
-      }
-      // this.change++
-    },
-    // getScrollPosition1(e){
-    //   console.log(e.target.scrollLeft)
-    //   this.options1.scales.yAxes[0].ticks.padding = (e.target.scrollLeft+10)*-1
-    //   this.options1.animation=false
-    //   this.change++
-    // },
-    // getSizes(){
-    //   document.getElementsByClassName('graphs-container-parent')[0].clientWidth
-    //   console.log(this.$refs)
+    getSizes(){
+      document.getElementsByClassName('graphs-container-parent')[0].clientWidth
+      console.log(this.$refs)
       
-    // },
+    },
     changeJSON(){
       let jsonString = JSON.stringify(this.serverRequestJSONdefault)
       let serverRequestJSON = JSON.parse(jsonString)
@@ -522,8 +447,8 @@ export default {
       this.$store.commit('showLoading', true)
       axios.post('php/testeando_v6.php', x)
         .then(res => {
-          // this.$store.commit('showLoading', false)
-          // console.log(res.data.graph1)
+          this.$store.commit('showLoading', false)
+          console.log(res.data.graph1)
           //graph1
           this.axis1 = this.axis(x)
           this.datacollection1.datasets[0].label = "Visitas"
@@ -531,38 +456,28 @@ export default {
           this.datacollectionAxis1.labels=[]
           this.datacollection1.datasets[0].data=[]
           this.datacollectionAxis1.datasets[0].data=[]
-          this.datacollectionTest.labels=[]
-          this.datacollectionTest.datasets[0].data=[]
-
           
           res.data.graph1.forEach((item)=>{
-            this.datacollectionTest.labels.push(item.x)
             this.datacollection1.labels.push(item.x)        
             this.datacollectionAxis1.labels.push(item.x)        
             this.datacollection1.datasets[0].data.push(item.y)
             this.datacollectionAxis1.datasets[0].data.push(item.y)
-            this.datacollectionTest.datasets[0].data.push(item.y)
           })
-          // this.displaySizeScroll = document.getElementsByClassName('graphs-container-parent')[1].clientWidth
-          // if(this.datacollection1.labels.length > this.displayQuantity){
-          //   this.displaySize = document.getElementsByClassName('graphs-container-parent')[1].clientWidth * this.datacollection1.labels.length / this.displayQuantity            
-          // } else {
-          //   this.displaySize = document.getElementsByClassName('graphs-container-parent')[1].clientWidth
-          // }
+          this.displaySizeScroll = document.getElementsByClassName('graphs-container-parent')[1].clientWidth
+          if(this.datacollection1.labels.length > this.displayQuantity){
+            this.displaySize = document.getElementsByClassName('graphs-container-parent')[1].clientWidth * this.datacollection1.labels.length / this.displayQuantity            
+          } else {
+            this.displaySize = document.getElementsByClassName('graphs-container-parent')[1].clientWidth
+          }
           //graph2
           this.axis2 = 'Horas'
           this.datacollection2.datasets[0].label = "Visitas Promedio"
           this.datacollection2.labels=[]
           this.datacollection2.datasets[0].data=[]
           
-          this.datacollectionTest2.labels=[]
-          this.datacollectionTest2.datasets[0].data=[]
-          
           res.data.graph2.forEach((item)=>{
             this.datacollection2.labels.push(item.x)        
             this.datacollection2.datasets[0].data.push(item.y)
-            this.datacollectionTest2.labels.push(item.x)        
-            this.datacollectionTest2.datasets[0].data.push(item.y)
           })
           //graph3
           this.axis3 = this.axis(x)
@@ -584,20 +499,13 @@ export default {
           this.datacollection4.labels=[]
           this.datacollection4.datasets[0].data=[]
           this.datacollection4.datasets[1].data=[]
-          this.datacollectionTest4.labels=[]
-          this.datacollectionTest4.datasets[0].data=[]
-          this.datacollectionTest4.datasets[1].data=[]
           
           res.data.graph4.forEach((item)=>{
             this.datacollection4.labels.push(item.x)        
             this.datacollection4.datasets[0].data.push(item.y1)
             this.datacollection4.datasets[1].data.push(item.y2)
-            this.datacollectionTest4.labels.push(item.x)        
-            this.datacollectionTest4.datasets[0].data.push(item.y1)
-            this.datacollectionTest4.datasets[1].data.push(item.y2)
           })
           this.change++
-          this.$store.commit('showLoading', false)
         })
         .catch(error => {
           this.$store.commit('showLoading', false)

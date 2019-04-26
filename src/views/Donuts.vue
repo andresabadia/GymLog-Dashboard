@@ -151,7 +151,7 @@ export default {
       })
       .then(res => {
         this.$store.commit('showLoading', false)
-        console.log(res)
+        // console.log(res)
         //graph1
         this.datacollection1.labels = []
         this.datacollection1.datasets[0].data=[]
@@ -171,9 +171,9 @@ export default {
         res.data.graph2.donut.forEach(item => {
           this.datacollection2.labels.push(this.replaceEmpty(item.color))
           this.datacollection2.datasets[0].data.push(this.roundUp(item.count))
-          console.log(parseFloat(item.count))
+          // console.log(parseFloat(item.count))
           this.currentMonth2 += parseFloat(item.count)
-          console.log(this.currentMonth2)
+          // console.log(this.currentMonth2)
         });
         this.lastMonth2 = res.data.graph2.last_month.count
         //graph3

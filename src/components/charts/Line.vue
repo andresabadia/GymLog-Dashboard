@@ -21,8 +21,7 @@ export default {
   },
   watch: {
     change () {
-      console.log("this is called")
-      this.renderChart(this.chartData, this.options)
+      this.renderChart(this.chartData, this.options)   
     }
   },
   mounted () {
