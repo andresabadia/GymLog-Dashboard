@@ -6,10 +6,10 @@
       </div>
       <div class="card-body">
         <form>
-        <div class="radio-button-container">      
-          <span @click="serverRequestJSONdefault.x='day'; changeJSON();"><RadioButtons :checked="true">Dia</RadioButtons></span>
-          <span @click="serverRequestJSONdefault.x='week'; changeJSON();"><RadioButtons>Semana</RadioButtons></span>
-          <span @click="serverRequestJSONdefault.x='month'; changeJSON();"><RadioButtons>Mes</RadioButtons></span>      
+        <div class="radio-button-container">
+          <RadioButtons radioValue="day" @change="changeSelection" :value="selection.x">Dia</RadioButtons>
+          <RadioButtons radioValue="week" @change="changeSelection" :value="selection.x">Semana</RadioButtons>
+          <RadioButtons radioValue="month" @change="changeSelection" :value="selection.x">Mes</RadioButtons>      
         </div>
         </form>
         <div class="checkbox-button-container-parent">
@@ -40,19 +40,21 @@
           <button class="btn btn-warning" @click="changeJSON()">Aplicar filtros</button>
         </div>
         
-        <p>Width: {{windowWidth}} - Height: {{windowHeight}}</p> 
-        <div>
+        <div class="graphs-chart-container">
           <Chart :data="datacollection3" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Pagos</Chart>
         </div>
         <hr>
-        <div>
+        <div class="graphs-chart-container">
           <Chart :data="datacollection4" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity" :type="'line'">Ingresos en USD y Accesos vigentes</Chart>
         </div>
         <hr>
-        <div>
+        <div class="graphs-chart-container">
           <Chart :data="datacollection1" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Visitas</Chart>
         </div>
         <hr>
+        <div class="graphs-chart-container">
+          <Chart :data="datacollection2" :change="change" :width="width" :height="height" :displayQuantity="30" :type="'line'">Visitas promedio por dia</Chart>
+        </div>        
         <div class="checkbox-button-container-horizontal">      
           <CheckboxButtons v-model="selection.day_mon">Lun</CheckboxButtons>
           <CheckboxButtons v-model="selection.day_tue">Mar</CheckboxButtons>
@@ -65,9 +67,6 @@
         <div>
           <button class="btn btn-warning" @click="changeJSON()">Aplicar filtros</button>
         </div>
-        <div>
-          <Chart :data="datacollection2" :change="change" :width="width" :height="height" :displayQuantity="30" :type="'line'">Visitas promedio por dia</Chart>
-        </div>        
       </div>
     </div>
     
@@ -80,39 +79,17 @@ import BarChart from '../components/charts/Bar.vue'
 import Chart from '../components/charts/Chart.vue'
 import CheckboxButtons from '../components/CheckboxButtons.vue'
 import RadioButtons from '../components/RadioButtons.vue'
-import { constants } from 'fs';
 
 export default {
   data(){
     return{
-      datacollectionTest: {
-                labels: [3,4,5,1,2,3],
-                datasets: [
-                {
-                    label: 'Data One',
-                    backgroundColor: '#ffab00',
-                    data: [3,4,5,1,2,3]
-                }
-                ]
-            },
-      
       datacollection1: {
-        labels: [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5],
+        labels: [],
         datasets: [
           {
-            label: 'Data One',
+            label: 'Visitas',
             backgroundColor: '#ffab00',
-            data: [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5]
-          }
-        ]
-      },
-      datacollectionAxis1: {
-        labels: [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5],
-        datasets: [
-          {
-            label: 'Data One',
-            backgroundColor: '#ffab0000',
-            data: [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5]
+            data: []
           }
         ]
       },
@@ -120,30 +97,19 @@ export default {
         labels: [],
         datasets: [
           {
-            label: 'Data One',
+            label: 'Visitas Promedio',
             backgroundColor: '#ffab0070',           
             borderColor: '#ffab00',
             data: []
           }
         ]
-      },      
-            datacollectionTest2: {
-                labels: [],
-                datasets: [
-                {
-                    label: 'Data One',
-                    backgroundColor: '#ffab0070',
-                    borderColor: '#ffab00',
-                    data: []
-                }
-                ]
-            },
+      },
       datacollection3: {
         labels: [],
         datasets: [
           {
             yAxisID: 'y2',
-            label: 'Data Two',
+            label: 'Cantidad de Pagos',
             backgroundColor: '#616161',
             borderColor: '#616161',
             data: [],
@@ -153,7 +119,7 @@ export default {
           },
           {
             yAxisID: 'y1',
-            label: 'Data One',
+            label: 'Ingresos en USD',
             backgroundColor: '#ffab00',
             data: []
           }
@@ -164,7 +130,7 @@ export default {
         datasets: [
           {
             yAxisID: 'y1',
-            label: 'Data One',
+            label: 'Accesos Vigentes',
             backgroundColor: '#ffab0070',
             borderColor: '#ffab00',
             data: [],
@@ -172,146 +138,13 @@ export default {
           },
           {
             yAxisID: 'y2',
-            label: 'Data Two',
+            label: 'Ingresos por Periodo',
             backgroundColor: '#61616170',
             borderColor: '#616161',
             data: [],
             lineTension: 0.1,
           }
         ]
-      },
-      datacollectionTest4: {
-                labels: [],
-                datasets: [
-                {
-                    yAxisID: 'y1',
-                    label: 'Data One',
-                    backgroundColor: '#ffab0070',            
-                    borderColor: '#ffab00',
-                    data: [],
-                    lineTension: 0.1,
-                },
-                {
-                    yAxisID: 'y2',
-                    label: 'Data Two',
-                    backgroundColor: '#61616170',            
-                    borderColor: '#616161',
-                    data: [],
-                    lineTension: 0.1,
-                }
-                ]
-            },
-      options1: {
-        legend:{
-          display:false
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        display:true,
-        scales:{
-          yAxes: [{
-            ticks:{
-              min: 0,
-              display: true,              
-              fontColor: '#00000000'            
-            }
-          }]          
-        }
-      },
-      optionsAxis1:{        
-        legend:{
-          display:false
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        display:false,
-        scales:{
-          yAxes: [{
-            display:true,
-            gridLines:{
-              display:false,
-              color: '#00000000'
-            },
-            ticks:{
-              min: 0,
-              mirror: false,
-              display: true              
-            } 
-          }] ,
-          xAxes:[{
-            display:true,
-            gridLines:{
-              display:false
-            },
-            ticks:{
-              display:true,
-              fontColor:'#00000000'
-              }
-          }]        
-        }
-      },
-      options2: {
-        legend:{
-          display:false
-        },
-        animation:true,
-        responsive: true,
-        maintainAspectRatio: false,
-        display:true,
-        scales:{
-          yAxes: [{
-            ticks:{
-              min: 0,
-              mirror: true,
-              padding: -10,
-              display: 'top'              
-            } 
-          }]          
-        }
-      },
-      options3: {
-        legend:{
-          display:false
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        scales:{
-          yAxes: [{
-            id: 'y1',
-            ticks:{
-              min: 0,
-            } 
-          },
-          {
-            id:'y2',
-            position: 'right',
-            ticks:{
-              min: 0
-            } 
-          }]          
-        }
-      },
-      options4: {
-        legend:{
-          display:false
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        scales:{
-          yAxes: [{
-            id: 'y1',
-            ticks:{
-              min: 0,
-            } 
-          },
-          {
-            id:'y2',
-            position: 'right',
-            ticks:{
-              min: 0
-            } 
-          }]          
-        }
       },
       change: 0,
       axis1: 'Axis 1',
@@ -344,6 +177,7 @@ export default {
         "day_sat": "7"
       },
       selection:{
+        "x":"day",
         "gender_m": true,
         "gender_f": true,
         "occ_student": true,
@@ -403,13 +237,16 @@ export default {
             this.getWindowWidth()
             this.getWindowHeight()
             })
-    // this.getSizes()
   },
     beforeDestroy() {
         window.removeEventListener('resize', this.getWindowWidth);
         window.removeEventListener('resize', this.getWindowHeight);
     },
   methods:{
+    changeSelection(newValue){
+      this.selection.x = newValue
+      this.changeJSON()
+    },
     getWindowWidth(event) {
       this.windowWidth = document.documentElement.clientWidth;
       this.changeDisplayQuantity()
@@ -429,7 +266,6 @@ export default {
       } else if(this.windowWidth >= 992){
         this.displayQuantity = 60
       }
-      // this.change++
     },
     changeChartHeight(){
       if(this.windowHeight < 500){
@@ -437,22 +273,12 @@ export default {
       } else {
         this.height=400
       }
-      // this.change++
     },
-    // getScrollPosition1(e){
-    //   console.log(e.target.scrollLeft)
-    //   this.options1.scales.yAxes[0].ticks.padding = (e.target.scrollLeft+10)*-1
-    //   this.options1.animation=false
-    //   this.change++
-    // },
-    // getSizes(){
-    //   document.getElementsByClassName('graphs-container-parent')[0].clientWidth
-    //   console.log(this.$refs)
-      
-    // },
     changeJSON(){
       let jsonString = JSON.stringify(this.serverRequestJSONdefault)
       let serverRequestJSON = JSON.parse(jsonString)
+
+      serverRequestJSON.x = this.selection.x
 
       if(!this.selection.gender_m){
         serverRequestJSON.gender_m = "'xxx'"
@@ -514,8 +340,8 @@ export default {
       if(!this.selection.day_sat){
         serverRequestJSON.day_sat = "8"
       }
+      // console.log('request ',serverRequestJSON)
       this.serverRequest(serverRequestJSON)
-      // console.log(serverRequestJSON)
     },
 
     serverRequest (x){
@@ -523,46 +349,26 @@ export default {
       axios.post('php/testeando_v6.php', x)
         .then(res => {
           // this.$store.commit('showLoading', false)
-          // console.log(res.data.graph1)
+          // console.log('response ', res.data.graph1)
           //graph1
           this.axis1 = this.axis(x)
           this.datacollection1.datasets[0].label = "Visitas"
           this.datacollection1.labels=[]
-          this.datacollectionAxis1.labels=[]
           this.datacollection1.datasets[0].data=[]
-          this.datacollectionAxis1.datasets[0].data=[]
-          this.datacollectionTest.labels=[]
-          this.datacollectionTest.datasets[0].data=[]
-
           
           res.data.graph1.forEach((item)=>{
-            this.datacollectionTest.labels.push(item.x)
-            this.datacollection1.labels.push(item.x)        
-            this.datacollectionAxis1.labels.push(item.x)        
+            this.datacollection1.labels.push(item.x)            
             this.datacollection1.datasets[0].data.push(item.y)
-            this.datacollectionAxis1.datasets[0].data.push(item.y)
-            this.datacollectionTest.datasets[0].data.push(item.y)
           })
-          // this.displaySizeScroll = document.getElementsByClassName('graphs-container-parent')[1].clientWidth
-          // if(this.datacollection1.labels.length > this.displayQuantity){
-          //   this.displaySize = document.getElementsByClassName('graphs-container-parent')[1].clientWidth * this.datacollection1.labels.length / this.displayQuantity            
-          // } else {
-          //   this.displaySize = document.getElementsByClassName('graphs-container-parent')[1].clientWidth
-          // }
           //graph2
           this.axis2 = 'Horas'
           this.datacollection2.datasets[0].label = "Visitas Promedio"
           this.datacollection2.labels=[]
           this.datacollection2.datasets[0].data=[]
           
-          this.datacollectionTest2.labels=[]
-          this.datacollectionTest2.datasets[0].data=[]
-          
           res.data.graph2.forEach((item)=>{
             this.datacollection2.labels.push(item.x)        
             this.datacollection2.datasets[0].data.push(item.y)
-            this.datacollectionTest2.labels.push(item.x)        
-            this.datacollectionTest2.datasets[0].data.push(item.y)
           })
           //graph3
           this.axis3 = this.axis(x)
@@ -584,17 +390,11 @@ export default {
           this.datacollection4.labels=[]
           this.datacollection4.datasets[0].data=[]
           this.datacollection4.datasets[1].data=[]
-          this.datacollectionTest4.labels=[]
-          this.datacollectionTest4.datasets[0].data=[]
-          this.datacollectionTest4.datasets[1].data=[]
           
           res.data.graph4.forEach((item)=>{
             this.datacollection4.labels.push(item.x)        
             this.datacollection4.datasets[0].data.push(item.y1)
             this.datacollection4.datasets[1].data.push(item.y2)
-            this.datacollectionTest4.labels.push(item.x)        
-            this.datacollectionTest4.datasets[0].data.push(item.y1)
-            this.datacollectionTest4.datasets[1].data.push(item.y2)
           })
           this.change++
           this.$store.commit('showLoading', false)
@@ -639,7 +439,9 @@ export default {
 
 <style scoped>
 .card{
-  margin:10px;
+  /* margin:10px;
+  max-width: 1200px; */
+  /* margin: auto; */
   /* background-color: rgba(0,0,0,0.2);
   border: 1px solid rgba(0,0,0,.125);
   border-radius: .25rem; */
@@ -666,14 +468,9 @@ export default {
   margin: 3px 5px;
   align-items: start;
 }
-h2{
-  margin-top:40px;
-}
-.graphs-container-parent{
-  overflow-x: auto;
-}
-.graphs-container{
+.graphs-chart-container{
   margin: 0;
+  margin-top: 40px;
 }
 .checkbox-title{
   font-weight: bold;
@@ -682,17 +479,18 @@ h2{
 @media only screen and (min-width: 576px) {
   .graphs{
     padding: 0 10px;
-  }
-  h2{
-    margin-top:60px;
-  }
-  .graphs-container-parent{
-    margin: 0 100px;
-  }
+  } 
   .checkbox-button-container{
   margin: 3px 15px;
   }
+  .graphs-chart-container{
+    margin: 0 10px;    
+    margin-top: 50px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  /* .card{
+    margin: 10px auto;
+  } */
 }
 </style>
-
-

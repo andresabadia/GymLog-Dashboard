@@ -20,7 +20,6 @@ export default {
   margin-bottom: 12px;
   margin-left: 5px;
   cursor: pointer;
-  font-size: 1.2em;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

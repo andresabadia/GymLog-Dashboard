@@ -44,6 +44,11 @@ export default new Router({
       path: '/graphs',
       name: 'graphs',
       component: () => import('./views/Graphs.vue')
+    },    
+    {
+      path: '/tutorials',
+      name: 'tutorials',
+      component: () => import('./views/Tutorials.vue')
     }
   ]
 })

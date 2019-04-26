@@ -1,14 +1,25 @@
 <template>
     <label class="radio-container"><slot></slot>
-        <input type="radio" :checked="checked?'checked':''" name="radio">
+        <input type="radio" :value="radioValue" name="radio" v-model="radioButtonValue">
         <span class="checkmark"></span>
     </label>
 </template>
 <script>
 export default {
     props:[
-        'checked'
-    ]
+        'value',
+        'radioValue'
+    ],
+    computed:{
+      radioButtonValue:{
+        get(){
+          return this.value
+        },
+        set(){
+          this.$emit('change', this.radioValue)
+        }
+      }
+    }
 }
 </script>
 <style scoped>
@@ -20,7 +31,6 @@ export default {
   margin-bottom: 12px;
   margin-right: 24px;
   cursor: pointer;
-  font-size: 1.2em;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

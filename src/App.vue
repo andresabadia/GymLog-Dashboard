@@ -1,21 +1,17 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/excel-export">ExcelExport</router-link> |
-      <router-link to="/dashboard">Dashboard</router-link> |
-      <router-link to="/tables">Tables</router-link> |
-      <router-link to="/graphs">Graphs</router-link>
-    </div>
+    <Navigation></Navigation>    
     <router-view/>
     <loading v-if="$store.state.loading"></loading>
   </div>
 </template>
 <script>
 import Loading from './components/Loading.vue'
+import Navigation from './components/Navigation.vue'
 export default {
   components:{
-    Loading
+    Loading,
+    Navigation
   },
   created(){      
     console.log('App created check user id')  
@@ -32,17 +28,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #424242;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #424242;
-}
-
-#nav a.router-link-exact-active {
-  color: #ffab00;
 }
 </style>

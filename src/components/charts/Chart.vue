@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="chart-legend">
-            <div v-for="(dataset) in chartData().datasets" :key="dataset" class="chart-legend-child"><div :style="'margin:0 5px; height:13px; width:13px; background:'+dataset.backgroundColor+';'"></div><div>{{dataset.label}}</div></div>
+            <div v-for="(dataset) in chartData().datasets" :key="dataset.label" class="chart-legend-child"><div :style="'margin:0 5px; height:13px; width:13px; background:'+dataset.backgroundColor+';'"></div><div>{{dataset.label}}</div></div>
         </div>
     </div>
 </template>
@@ -36,12 +36,12 @@ export default {
             y1Width:40,
             y2Width:40,
             datacollectionDefault: {
-                labels: [3,4,5,1,2,3],
+                labels: [],
                 datasets: [
                 {
                     label: 'Data One',
                     backgroundColor: '#ffab00',
-                    data: [3,4,5,1,2,3]
+                    data: []
                 }
                 ]
             },
@@ -227,7 +227,9 @@ export default {
     text-align: center;
 }
 .chart-title{
-    
+    font-weight: bold;
+    font-size:110%;  
+    margin: 10px 0;  
 }
 .chart-elements-container{
     display:flex;

@@ -7,9 +7,9 @@
       <div class="card-body">
         <form>
         <div class="radio-buttons-container">
-          <span @click="donutChart('age_group')"><RadioButtons :checked="true">Edades</RadioButtons></span>
-          <span @click="donutChart('gender')"><RadioButtons>Sexo</RadioButtons></span>
-          <span @click="donutChart('occupation')"><RadioButtons>Ocupación</RadioButtons></span>
+          <RadioButtons radioValue="age_group" @change="changeSelection" :value="filterColor">Edades</RadioButtons>
+          <RadioButtons radioValue="gender" @change="changeSelection" :value="filterColor">Sexo</RadioButtons>
+          <RadioButtons radioValue="occupation" @change="changeSelection" :value="filterColor">Ocupación</RadioButtons>
         </div>
         </form>
         <div class="donuts-container-parent">
@@ -117,13 +117,18 @@ export default {
         cutoutPercentage:50
       },
       change: 0,
-      filterName:''
+      filterName:'',
+      filterColor:'age_group'
     }
   },
   created(){
-    this.donutChart('age_group')
+    this.donutChart(this.filterColor)
   },
   methods:{
+    changeSelection(newValue){
+      this.filterColor = newValue
+      this.donutChart(this.filterColor)
+    },
     roundUp(value){
       return Math.round(value)
     },
@@ -208,7 +213,8 @@ export default {
 </script>
 <style scoped>
 .card{
-  margin:10px;
+  /* margin:10px;  
+  max-width: 1200px; */
   /* background-color: rgba(0,0,0,0.2);
   border: 1px solid rgba(0,0,0,.125);
   border-radius: .25rem; */
@@ -330,6 +336,9 @@ button{
   }
 }
 @media only screen and (min-width: 1200px) {  
+  .card{
+    /* margin: 10px auto; */
+  }
 }
 .radio-buttons-container{
     display: flex;

@@ -111,7 +111,7 @@ height: 370px;
 margin-top: auto;
 margin-bottom: auto;
 width: 400px;
-background-color: rgba(0,0,0,0.5) !important;
+background-color: #00000080 !important;
 }
 
 .card-text{
@@ -120,7 +120,7 @@ background-color: rgba(0,0,0,0.5) !important;
 .social_icon span{
 font-size: 60px;
 margin-left: 10px;
-color: #FFC312;
+color: #ffab00;
 }
 
 .social_icon span:hover{
@@ -147,7 +147,7 @@ top: -45px;
 
 .input-group-prepend span{
 width: 50px;
-background-color: #FFC312;
+background-color: #ffab00;
 color: black;
 border:0 !important;
 }
@@ -171,7 +171,7 @@ margin-right: 5px;
 
 .login_btn{
 color: black;
-background-color: #FFC312;
+background-color: #ffab00;
 width: 100px;
 }
 

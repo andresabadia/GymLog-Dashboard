@@ -6,7 +6,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loading:false,
-    userId:false
+    userId:false,
+    glUser:{
+      gym_name:'Gym Name',
+      gym_owner: 'Owner',
+      date: '2019-04-25 21:59:12.718',
+      gym_id: ''
+    }
   },
   mutations: {
     showLoading:(state, payload)=>{
