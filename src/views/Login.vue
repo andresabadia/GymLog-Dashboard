@@ -180,13 +180,13 @@ margin-right: 5px;
 }
 
 .login_btn{
-color: black;
+color: #424242;
 background-color: #ffab00;
 width: 100px;
 }
 
 .login_btn:hover{
-color: black;
+color: 424242;
 background-color: white;
 }
 

@@ -27,9 +27,9 @@ export default {
 .radio-container {
   display: block;
   position: relative;
-  padding-left: 35px;
+  padding-left: 30px;
   margin-bottom: 12px;
-  margin-right: 24px;
+  margin-right: 18px;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -85,6 +85,12 @@ export default {
 	height: 8px;
 	border-radius: 50%;
 	background: #424242;
+}
+@media only screen and (min-width: 576px) {  
+.radio-container {
+  padding-left: 35px;
+  margin-right: 24px;
+}
 }
 </style>
 

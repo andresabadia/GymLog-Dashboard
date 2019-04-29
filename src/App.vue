@@ -29,4 +29,20 @@ export default {
   text-align: center;
   color: #424242;
 }
+.btn-color-primary{
+  color: #424242;  
+  background-color: #ffab00;
+}
+.btn-color-primary:hover{
+  color: #424242;  
+  background-color: #ffab0075;
+}
+.btn-color-negative{
+  color: #ffab00;  
+  background-color: #424242;
+}
+.btn-color-negative:hover{
+  color: #ffab00;  
+  background-color: #212121;
+}
 </style>

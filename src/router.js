@@ -35,21 +35,21 @@ export default new Router({
       name: 'dashboard',
       component: () => import('./views/Dashboard.vue')
     },
-    {
-      path: '/tables',
-      name: 'tables',
-      component: () => import('./views/Tables.vue')
-    },
-    {
-      path: '/graphs',
-      name: 'graphs',
-      component: () => import('./views/Graphs.vue')
-    },    
-    {
-      path: '/donuts',
-      name: 'donuts',
-      component: () => import('./views/Donuts.vue')
-    },    
+    // {
+    //   path: '/tables',
+    //   name: 'tables',
+    //   component: () => import('./views/Tables.vue')
+    // },
+    // {
+    //   path: '/graphs',
+    //   name: 'graphs',
+    //   component: () => import('./views/Graphs.vue')
+    // },    
+    // {
+    //   path: '/donuts',
+    //   name: 'donuts',
+    //   component: () => import('./views/Donuts.vue')
+    // },    
     {
       path: '/tutorials',
       name: 'tutorials',

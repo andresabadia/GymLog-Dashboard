@@ -12,33 +12,40 @@
           <RadioButtons radioValue="month" @change="changeSelection" :value="selection.x">Mes</RadioButtons>      
         </div>
         </form>
-        <div class="checkbox-button-container-parent">
-          <div class="checkbox-button-container">
-            <div class="checkbox-title">Edad</div>
-            <CheckboxButtons v-model="selection.age_null">Nulo</CheckboxButtons>
-            <CheckboxButtons v-model="selection.age_0_20">0-20</CheckboxButtons>
-            <CheckboxButtons v-model="selection.age_21_30">21-30</CheckboxButtons>
-            <CheckboxButtons v-model="selection.age_31_40">31-40</CheckboxButtons>
-            <CheckboxButtons v-model="selection.age_41_50">41-50</CheckboxButtons>
-            <CheckboxButtons v-model="selection.age_50_plus">51+</CheckboxButtons>
+        <button class="btn btn-color-negative" @click="showFilters=!showFilters"><i class="fas fa-filter"></i> Filtrar <i class="fas fa-chevron-down" v-show="!showFilters"></i><i class="fas fa-chevron-up" v-show="showFilters"></i></button>
+        <transition name="accordion"
+          v-on:before-enter="beforeEnter" v-on:enter="enter"
+          v-on:before-leave="beforeLeave" v-on:leave="leave">
+          <div class="graphs-filters" v-show="showFilters">
+            <div class="checkbox-button-container-parent">
+              <div class="checkbox-button-container">
+                <div class="checkbox-title">Edad</div>
+                <CheckboxButtons v-model="selection.age_null">Nulo</CheckboxButtons>
+                <CheckboxButtons v-model="selection.age_0_20">0-20</CheckboxButtons>
+                <CheckboxButtons v-model="selection.age_21_30">21-30</CheckboxButtons>
+                <CheckboxButtons v-model="selection.age_31_40">31-40</CheckboxButtons>
+                <CheckboxButtons v-model="selection.age_41_50">41-50</CheckboxButtons>
+                <CheckboxButtons v-model="selection.age_50_plus">51+</CheckboxButtons>
+              </div>
+              <div class="checkbox-button-container">
+                <div class="checkbox-title">Ocupación</div>
+                <CheckboxButtons v-model="selection.occ_null">Nulo</CheckboxButtons>
+                <CheckboxButtons v-model="selection.occ_self">Emprendedor</CheckboxButtons>
+                <CheckboxButtons v-model="selection.occ_emplo">Empleado</CheckboxButtons>
+                <CheckboxButtons v-model="selection.occ_student">Estudiante</CheckboxButtons>
+                <CheckboxButtons v-model="selection.occ_othr">Otro</CheckboxButtons>
+              </div>
+              <div class="checkbox-button-container">
+                <div class="checkbox-title">Sexo</div>
+                <CheckboxButtons v-model="selection.gender_m">M</CheckboxButtons>
+                <CheckboxButtons v-model="selection.gender_f">F</CheckboxButtons>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-color-primary" @click="changeJSON()">Aplicar filtros</button>
+            </div>
           </div>
-          <div class="checkbox-button-container">
-            <div class="checkbox-title">Ocupación</div>
-            <CheckboxButtons v-model="selection.occ_null">Nulo</CheckboxButtons>
-            <CheckboxButtons v-model="selection.occ_self">Emprendedor</CheckboxButtons>
-            <CheckboxButtons v-model="selection.occ_emplo">Empleado</CheckboxButtons>
-            <CheckboxButtons v-model="selection.occ_student">Estudiante</CheckboxButtons>
-            <CheckboxButtons v-model="selection.occ_othr">Otro</CheckboxButtons>
-          </div>
-          <div class="checkbox-button-container">
-            <div class="checkbox-title">Sexo</div>
-            <CheckboxButtons v-model="selection.gender_m">M</CheckboxButtons>
-            <CheckboxButtons v-model="selection.gender_f">F</CheckboxButtons>
-          </div>
-        </div>
-        <div>
-          <button class="btn btn-warning" @click="changeJSON()">Aplicar filtros</button>
-        </div>
+        </transition>
         
         <div class="graphs-chart-container">
           <Chart :data="datacollection3" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Pagos <Tooltip direction="down">Muestra los ingresos en moneda (barras amarillas) así como la cantidad te pagos recibidos (línea gris) por unidad de tiempo.</Tooltip></Chart>
@@ -65,7 +72,7 @@
           <CheckboxButtons v-model="selection.day_sun">Dom</CheckboxButtons>
         </div>
         <div>
-          <button class="btn btn-warning" @click="changeJSON()">Aplicar filtros</button>
+          <button class="btn btn-color-primary" @click="changeJSON()">Aplicar filtros</button>
         </div>
       </div>
     </div>
@@ -210,6 +217,8 @@ export default {
       
       windowWidth: 0,
       windowHeight: 0,
+
+      showFilters: false
     }
   },
   props:[
@@ -239,19 +248,31 @@ export default {
   },
   mounted(){
     this.$nextTick(function() {
-            window.addEventListener('resize', this.getWindowWidth);
-            window.addEventListener('resize', this.getWindowHeight);
+      window.addEventListener('resize', this.getWindowWidth);
+      window.addEventListener('resize', this.getWindowHeight);
 
-            //Init
-            this.getWindowWidth()
-            this.getWindowHeight()
-            })
+      //Init
+      this.getWindowWidth()
+      this.getWindowHeight()
+      })
   },
     beforeDestroy() {
-        window.removeEventListener('resize', this.getWindowWidth);
-        window.removeEventListener('resize', this.getWindowHeight);
+      window.removeEventListener('resize', this.getWindowWidth);
+      window.removeEventListener('resize', this.getWindowHeight);
     },
   methods:{
+    beforeEnter: function(el) {
+      el.style.height = '0';
+    },
+    enter: function(el) {
+      el.style.height = el.scrollHeight + 'px';
+    },
+    beforeLeave: function(el) {
+      el.style.height = el.scrollHeight + 'px';
+    },
+    leave: function(el) {
+      el.style.height = '0';
+    },
     changeSelection(newValue){
       this.selection.x = newValue
       this.changeJSON()
@@ -449,14 +470,16 @@ export default {
 </script>
 
 <style scoped>
-.card{
-  /* margin:10px;
-  max-width: 1200px; */
-  /* margin: auto; */
-  /* background-color: rgba(0,0,0,0.2);
-  border: 1px solid rgba(0,0,0,.125);
-  border-radius: .25rem; */
+.graphs-filters{
+  margin-top:5px;
+  padding: 10px 0;
+  background-color: #6161610f;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px;
+  overflow:hidden;
+  transition: 150ms ease-out;
 }
+
 .radio-button-container, .checkbox-button-container-horizontal{
     display: flex;
     justify-content: center;
@@ -491,6 +514,9 @@ export default {
   .graphs{
     padding: 0 10px;
   } 
+  .graphs-filters{
+    padding: 10px 5px;
+  }
   .checkbox-button-container{
   margin: 3px 15px;
   }

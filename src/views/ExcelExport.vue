@@ -14,7 +14,7 @@
       <form action="php/index.php" target="_blank" method="POST">
         <input type="hidden" name="gym_id" :value="$store.state.glUser.gym_id">  
         <input type="hidden" name="month" :value="selections[selectedIndex]">  
-        <button class="btn btn-warning" type="submit">Exportar Excel</button>
+        <button class="btn btn-color-primary" type="submit">Exportar Excel</button>
       </form>
     </div>
     <div class="excel-export-explain">

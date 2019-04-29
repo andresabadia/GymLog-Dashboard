@@ -52,7 +52,7 @@ export default {
 #nav {
     padding: 5px;
     display: flex;
-    background: #00000080;
+    background: #000000b6;
     position: sticky;
     width: 100%;
     top: 0;

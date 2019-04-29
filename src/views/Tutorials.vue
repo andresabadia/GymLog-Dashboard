@@ -3,27 +3,19 @@
     <div class="tutorials-title">
       <div>Video tutoriales</div>
       <p></p>
-      <YouTube question="¿Cómo agregar un cliente nuevo?"> <iframe src="https://www.youtube-nocookie.com/embed/AlD9mCWtYRs?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
-      <YouTube question="¿Cómo modificar los datos de un cliente existente?"> <iframe src="https://www.youtube-nocookie.com/embed/zXRYrxNeO0s?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
-      <YouTube question="¿Cómo registrar un nuevo pago?"> <iframe src="https://www.youtube-nocookie.com/embed/tHdjxYBqU18?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
-      <YouTube question="¿Qué puedo hacer en la vista de ajustes?"> <iframe src="https://www.youtube-nocookie.com/embed/s1WXbadWnyg?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
-      <YouTube question="¿Cómo enviar un recordatorio de pago a clientes cuyo acceso esta por expirar?"> <iframe src="https://www.youtube-nocookie.com/embed/SmRiY3hwFNE?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
-      <YouTube question="¿Cómo realizar un respaldo manual de datos?"> <iframe src="https://www.youtube-nocookie.com/embed/Dlpvqe1Q8FQ?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
-      <YouTube question="¿Cómo exportar todos los datos de la aplicacion desde mi dispositivo Android?"> <iframe src="https://www.youtube-nocookie.com/embed/CkgSbydrmJI?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
-      <YouTube question="¿Qué me ofrece la vista de visitas recientes?"> <iframe src="https://www.youtube-nocookie.com/embed/LQRJg2cUtS4?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
+      <you-tube v-for="yTube in youtube" :question="yTube.question" :linkId="yTube.linkId" :key="yTube.linkId"></you-tube>      
     </div> 
   </div>
 </template>
 
 <script>
 import Store from '../store.js'
-import Tooltip from '../components/Tooltip.vue'
 import YouTube from '../components/YouTube.vue'
 export default {
   beforeRouteEnter (to, from, next) {
     console.log('this store: ',Store.state.userId)
-    // if(Store.state.userId){
-    if(true){
+    if(Store.state.userId){
+    // if(true){
       next()
     } else {
       next(false)
@@ -31,11 +23,43 @@ export default {
   },
   data(){
     return{
-      youtube:['<iframe src="https://www.youtube-nocookie.com/embed/AlD9mCWtYRs?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe>'],
+      youtube:[
+        {
+          question:'¿Cómo agregar un cliente nuevo?',
+          linkId:'AlD9mCWtYRs',
+        },
+        {
+          question:'¿Cómo modificar los datos de un cliente existente?',
+          linkId:'zXRYrxNeO0s',
+        },
+        {
+          question:'¿Cómo registrar un nuevo pago?',
+          linkId:'tHdjxYBqU18',
+        },
+        {
+          question:'¿Qué puedo hacer en la vista de ajustes?',
+          linkId:'s1WXbadWnyg',
+        },
+        {
+          question:'¿Cómo enviar un recordatorio de pago a clientes cuyo acceso esta por expirar?',
+          linkId:'SmRiY3hwFNE',
+        },
+        {
+          question:'¿Cómo realizar un respaldo manual de datos?',
+          linkId:'Dlpvqe1Q8FQ',
+        },
+        {
+          question:'¿Cómo exportar todos los datos de la aplicacion desde mi dispositivo Android?',
+          linkId:'CkgSbydrmJI',
+        },
+        {
+          question:'¿Qué me ofrece la vista de visitas recientes?',
+          linkId:'LQRJg2cUtS4'
+        }
+      ]
     }
   },
   components:{
-    Tooltip,
     YouTube
   }
 }
