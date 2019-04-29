@@ -12,7 +12,7 @@
         </ul>
       </div>
       <form action="php/index.php" target="_blank" method="POST">
-        <input type="hidden" name="gym_id" value="uf">  
+        <input type="hidden" name="gym_id" :value="$store.state.glUser.gym_id">  
         <input type="hidden" name="month" :value="selections[selectedIndex]">  
         <button class="btn btn-warning" type="submit">Exportar Excel</button>
       </form>
@@ -24,6 +24,7 @@
 </template>
 <script>
 import axios from 'axios'
+import Store from '../store.js'
 export default {
   data(){
     return{
@@ -34,9 +35,10 @@ export default {
   },
   methods:{
     populateDropdown(){
+      console.log('populateDropdown',Store.state.glUser.gym_id)
       this.$store.commit('showLoading', true)
       axios.post('php/months_drop_down.php',{
-        'gym_id': 'uf'
+        'gym_id': Store.state.glUser.gym_id
       })
       .then(res => {
         this.$store.commit('showLoading', false)
@@ -60,6 +62,15 @@ export default {
   },  
   created(){
     this.populateDropdown()
+  },
+  beforeRouteEnter (to, from, next) {
+    console.log('this store: ',Store.state.userId)
+    // if(true){
+    if(Store.state.userId){
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>

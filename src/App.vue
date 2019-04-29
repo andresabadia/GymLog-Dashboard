@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navigation></Navigation>    
+    <Navigation v-if="$store.state.userId"></Navigation>    
     <router-view/>
     <loading v-if="$store.state.loading"></loading>
   </div>

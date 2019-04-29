@@ -20,7 +20,7 @@
                 <div class="navigation-user-owner">{{$store.state.glUser.gym_owner}}</div>
                 <div class="navigation-user-last-update">Actualizado {{date($store.state.glUser.date)}}</div>
             </div>
-            <div class="navigation-logout">
+            <div class="navigation-logout" @click="logout()">
                 <div class="navigation-icon"><i class="fas fa-sign-out-alt"></i></div> 
                 <div class="navigation-text">Logout</div>
             </div>
@@ -38,6 +38,13 @@ export default {
         date(date) {
             return moment(date).fromNow();
         },
+        logout(){
+            localStorage.removeItem('gl-user')
+            sessionStorage.removeItem('gl-user')
+            this.$store.commit('resetUser')
+            this.$store.commit('checkUserId')
+            this.$router.push('login')
+        }
     }    
 }
 </script>

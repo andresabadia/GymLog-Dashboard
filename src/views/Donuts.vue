@@ -26,7 +26,7 @@
               </div>
               <DonutChart :chartData="datacollection1" :options="options" :change="change"></DonutChart>
             </div>
-            <div class="donuts-title">Visitas</div>
+            <div class="donuts-title">Visitas <Tooltip direction="up">Muestra las visitas a las instalaciones desde inicio del mes divididas por categoría. Una visita se cuenta como un usuario visitando las instalaciones en un día dado. <i>Por ejemplo: Si Juan visita el gimnasio hoy y luego vuelve a venir mañana, eso se cuenta como dos visitas; pero si Juan visita el gimnasio hoy por la mañana y hoy por la tarde eso se cuenta como una sola visita.</i></Tooltip></div>
           </div>
           <div class="donuts-container-around">
             <div class="donuts-container">
@@ -41,7 +41,7 @@
               </div>
               <DonutChart :chartData="datacollection2" :options="options" :change="change"></DonutChart>
             </div>
-            <div class="donuts-title">Pagos USD</div>       
+            <div class="donuts-title">Pagos {{currency}} <Tooltip direction="up">Muestra los ingresos en la moneda indicada desde inicios del mes divididos por categoría.</Tooltip></div>       
           </div>  
           <div class="donuts-container-around">
             <div class="donuts-container">
@@ -56,7 +56,7 @@
               </div>
               <DonutChart :chartData="datacollection3" :options="options" :change="change"></DonutChart>
             </div>
-            <div class="donuts-title">Accesos vigentes</div>       
+            <div class="donuts-title">Accesos vigentes <Tooltip direction="up">Muestra los accesos vigentes, en otras palabras, el conteo de todos los clientes que en algún momento del mes en curso tuvieron derecho a usar las instalaciones. Esto no incluye a clientes que pagan por el pase del día. <i>Por ejemplo: si Juan pago una semana de acceso a finales del mes pasado y su acceso se extiende hasta el mes actual eso se contaría como un acceso en el mes corriente; si Juan vuelve a pagar otra semana de acceso en el mes actual eso no incrementa el conteo dado que ya contamos a Juan una vez; si Pedro paga por un pase del día eso no se contaría dado que los pases del día no cuentan.</i></Tooltip></div>       
           </div>    
         </div>
         <div class="donuts-legend">
@@ -72,6 +72,8 @@
 import axios from 'axios'
 import DonutChart from '../components/charts/Donut.vue'
 import RadioButtons from '../components/RadioButtons.vue'
+import Tooltip from '../components/Tooltip.vue'
+import Store from '../store.js'
 export default {
   data(){
     return{
@@ -121,6 +123,14 @@ export default {
       filterColor:'age_group'
     }
   },
+  props:[
+    'currency'
+  ],
+  watch: {
+    currency(){
+      this.donutChart(this.filterColor)
+    }
+  },
   created(){
     this.donutChart(this.filterColor)
   },
@@ -152,7 +162,9 @@ export default {
       this.filterNameMethod(colors)
       this.$store.commit('showLoading', true)
       axios.post('php/donut.php',{
-        'colors': colors
+        'colors': colors,
+        'currency': "'"+this.currency+"'",
+        'gym_id':Store.state.glUser.gym_id
       })
       .then(res => {
         this.$store.commit('showLoading', false)
@@ -202,7 +214,8 @@ export default {
   },
   components: {
     DonutChart,
-    RadioButtons
+    RadioButtons,
+    Tooltip
   },
   filters:{
     roundUpFilter: value => {
@@ -284,6 +297,7 @@ button{
 .donuts-title{
   font-weight: bold;
   padding-top: 10px;
+  font-size: 110%;
 }
 @media only screen and (min-width: 576px) {  
   .donut-component{

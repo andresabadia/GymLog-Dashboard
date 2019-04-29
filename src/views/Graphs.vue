@@ -41,19 +41,19 @@
         </div>
         
         <div class="graphs-chart-container">
-          <Chart :data="datacollection3" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Pagos</Chart>
+          <Chart :data="datacollection3" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Pagos <Tooltip direction="down">Muestra los ingresos en moneda (barras amarillas) así como la cantidad te pagos recibidos (línea gris) por unidad de tiempo.</Tooltip></Chart>
         </div>
         <hr>
         <div class="graphs-chart-container">
-          <Chart :data="datacollection4" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity" :type="'line'">Ingresos en USD y Accesos vigentes</Chart>
+          <Chart :data="datacollection4" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity" :type="'line'">Ingresos en {{currency}}<br>y Accesos vigentes <Tooltip direction="down">Muestra los accesos vigentes y los ingresos correspondientes a un periodo dado (día, semana o mes). Accesos vigentes se refiere al conteo de los clientes que en tuvieron acceso pagado al gimnasio en un cierto día (o durante algún día de esa semana o mes). Ingresos se refiere a la suma de los ingresos distribuidos por el periodo de pago. <i>Por Ejemplo: imaginemos que tu negocio solo tiene 2 clientes, Juan y Pedro. Hoy es el primer día del mes y Juan viene y te paga 30 USD por un mes de acceso y Pedro viene y te paga 14 USD por una semana de acceso. Entonces Juan te está pagando 1 USD por día (dado que tiene 30 días de acceso) y Pedro te esta pagando 2 USD por día de acceso dado que 14/7=2. En este ejemplo durante la primera semana del mes tu conteo de accesos seria de 2 dado que en esta semana 2 clientes tienen derecho a visitar tus instalaciones y tus ingresos serian de 3 USD por cada día de la semana (1 USD de Juan + 2 USD de Pedro). Pasada la primera semana del mes, tu conteo de accesos bajaría a 1 dado que el acceso de Pedro caducó y tus ingresos bajarían a 1 USD por día por el resto del mes.</i></Tooltip></Chart>
         </div>
         <hr>
         <div class="graphs-chart-container">
-          <Chart :data="datacollection1" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Visitas</Chart>
+          <Chart :data="datacollection1" :change="change" :width="width" :height="height" :displayQuantity="displayQuantity">Visitas <Tooltip direction="down">Muestra el conteo de las visitas a las instalaciones por unidad de tiempo. Una visita se cuenta como un usuario visitando las instalaciones en un día dado. <i>Por ejemplo: Si Juan visita el gimnasio hoy y luego vuelve a venir mañana, eso se cuenta como dos visitas; pero si Juan visita el gimnasio hoy por la mañana y hoy por la tarde eso se cuenta como una sola visita.</i></Tooltip></Chart>
         </div>
         <hr>
         <div class="graphs-chart-container">
-          <Chart :data="datacollection2" :change="change" :width="width" :height="height" :displayQuantity="30" :type="'line'">Visitas promedio por dia</Chart>
+          <Chart :data="datacollection2" :change="change" :width="width" :height="height" :displayQuantity="30" :type="'line'">Visitas promedio por hora <Tooltip direction="down">Muestra el conteo de las visitas promedio a las instalaciones por hora del día. Cada punto indica a las personas llegadas de las XX:00 a las XX:59. Los filtros adicionales permiten restringir el grafico a días específicos de la semana.</Tooltip></Chart>
         </div>        
         <div class="checkbox-button-container-horizontal">      
           <CheckboxButtons v-model="selection.day_mon">Lun</CheckboxButtons>
@@ -79,6 +79,8 @@ import BarChart from '../components/charts/Bar.vue'
 import Chart from '../components/charts/Chart.vue'
 import CheckboxButtons from '../components/CheckboxButtons.vue'
 import RadioButtons from '../components/RadioButtons.vue'
+import Tooltip from '../components/Tooltip.vue'
+import Store from '../store.js'
 
 export default {
   data(){
@@ -210,12 +212,16 @@ export default {
       windowHeight: 0,
     }
   },
+  props:[
+    'currency'
+  ],
   components: {
     Chart,
     LineChart,
     BarChart,
     CheckboxButtons,
-    RadioButtons
+    RadioButtons,
+    Tooltip
   },
   watch: {
     displayQuantity() { 
@@ -223,6 +229,9 @@ export default {
     },
     height(){
       this.change++
+    },
+    currency(){
+      this.changeJSON()
     }
   },
   created(){
@@ -279,6 +288,8 @@ export default {
       let serverRequestJSON = JSON.parse(jsonString)
 
       serverRequestJSON.x = this.selection.x
+      serverRequestJSON.currency = "'"+this.currency+"'"
+      serverRequestJSON.gym_id = Store.state.glUser.gym_id
 
       if(!this.selection.gender_m){
         serverRequestJSON.gender_m = "'xxx'"
@@ -373,7 +384,7 @@ export default {
           //graph3
           this.axis3 = this.axis(x)
           this.datacollection3.datasets[0].label = "Cantidad de Pagos"
-          this.datacollection3.datasets[1].label = "Ingresos en USD"
+          this.datacollection3.datasets[1].label = "Ingresos en "+this.currency
           this.datacollection3.labels=[]
           this.datacollection3.datasets[0].data=[]
           this.datacollection3.datasets[1].data=[]

@@ -46,6 +46,11 @@ export default new Router({
       component: () => import('./views/Graphs.vue')
     },    
     {
+      path: '/donuts',
+      name: 'donuts',
+      component: () => import('./views/Donuts.vue')
+    },    
+    {
       path: '/tutorials',
       name: 'tutorials',
       component: () => import('./views/Tutorials.vue')

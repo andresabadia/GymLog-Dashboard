@@ -21,7 +21,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fas fa-key"></i></span>
                 </div>
-                <input type="password" class="form-control" placeholder="pin" v-model="pin">
+                <input type="password" class="form-control" placeholder="pin" v-model="pin" @keyup.enter="login(username, pin)">
               </div>
               <div class="row align-items-center remember">
                 <CheckboxButtons 
@@ -51,6 +51,7 @@
 <script>
 import axios from 'axios'
 import CheckboxButtons from '../components/CheckboxButtons.vue'
+import Store from '../store.js'
 export default {
   data(){
     return{
@@ -74,6 +75,7 @@ export default {
                 this.$router.push('home')
               } else {
                 sessionStorage.setItem('gl-user', JSON.stringify(res.data.content))
+                this.$router.push('home')
               }
             } else if (res.data.response == "FAILED") {
               this.serverResponse = res.data.content
@@ -86,6 +88,14 @@ export default {
   },
   components:{
     CheckboxButtons
+  },
+  beforeRouteEnter (to, from, next) {
+    console.log('this store: ',Store.state.userId)
+    if(!Store.state.userId){
+      next()
+    } else {
+      next(false)
+    }
   }
 }
 </script>

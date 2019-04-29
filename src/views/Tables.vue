@@ -2,6 +2,8 @@
   <div class="about">
     <h1>This is an tables page</h1>
     <p>{{date('2019-04-25 21:59:12.718')}} - {{formatedDate('2019-04-25 21:59:12.718')}}</p>
+    <YouTube question="Pregunta?"> <iframe src="https://www.youtube-nocookie.com/embed/AlD9mCWtYRs?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe> </YouTube>
+    <Tooltip direction="down">Le escribo el cachimbo de vainas</Tooltip>
     <Chart :type="'line'"></Chart>
     <Chart></Chart>    
     <Chart :data="datacollection3" :change="change"></Chart>
@@ -9,9 +11,12 @@
 </template>
 <script>
 import Chart from '../components/charts/Chart.vue'
+import Tooltip from '../components/Tooltip.vue'
+import YouTube from '../components/YouTube.vue'
 export default {
   data(){
     return{
+      youtube:['<iframe src="https://www.youtube-nocookie.com/embed/AlD9mCWtYRs?rel=0"  frameborder="0" allowfullscreen="allowfullscreen"></iframe>'],
       datacollection3: {
                 labels: [10,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,8],
                 datasets: [
@@ -37,7 +42,9 @@ export default {
     }
   },
   components:{
-    Chart
+    Chart,
+    Tooltip,
+    YouTube
   },
   methods:{
     date(date) {
