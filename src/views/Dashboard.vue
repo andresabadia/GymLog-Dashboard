@@ -17,6 +17,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 import Donuts from './Donuts.vue'
 import Graphs from './Graphs.vue'
 import Store from '../store.js'
@@ -41,10 +42,32 @@ export default {
     },
     formatedDate(date){
       return moment(date).format('dddd D [de] MMMM YYYY, h:mm a')
+    },
+    populateDropdown(){
+      console.log('populateDropdown',Store.state.glUser.gym_id)
+      this.$store.commit('showLoading', true)
+      axios.post('php/months_drop_down.php',{
+        'gym_id': Store.state.glUser.gym_id
+      })
+      .then(res => {
+        this.$store.commit('showLoading', false)
+        this.selections = []
+        res.data.forEach(item => {
+          this.selections.push(item.months)
+        });
+        console.log(res.data)
+      })
+      .catch(error => {
+        this.$store.commit('showLoading', false)
+        console.log(error)
+      })
     }
   },
+  created(){
+    console.log('Dashboard created')
+    this.$store.dispatch('asyncSetDate')
+  },
   beforeRouteEnter (to, from, next) {
-    console.log('this store: ',Store.state.userId)
     if(Store.state.userId){
     // if(true){
       next()

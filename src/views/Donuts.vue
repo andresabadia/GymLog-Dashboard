@@ -164,7 +164,8 @@ export default {
       axios.post('php/donut.php',{
         'colors': colors,
         'currency': "'"+this.currency+"'",
-        'gym_id':Store.state.glUser.gym_id
+        'gym_id':Store.state.glUser.gym_id,
+        // 'branch':"'%'"
       })
       .then(res => {
         this.$store.commit('showLoading', false)

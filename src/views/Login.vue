@@ -71,10 +71,10 @@ export default {
             console.log(res.data)
             if (res.data.response == "OK"){
               if(this.rememberMe){                
-                localStorage.setItem('gl-user', JSON.stringify(res.data.content))
+                localStorage.setItem('glm-user', JSON.stringify(res.data.content))
                 this.$router.push('home')
               } else {
-                sessionStorage.setItem('gl-user', JSON.stringify(res.data.content))
+                sessionStorage.setItem('glm-user', JSON.stringify(res.data.content))
                 this.$router.push('home')
               }
             } else if (res.data.response == "FAILED") {

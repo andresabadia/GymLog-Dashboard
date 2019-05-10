@@ -39,8 +39,8 @@ export default {
             return moment(date).fromNow();
         },
         logout(){
-            localStorage.removeItem('gl-user')
-            sessionStorage.removeItem('gl-user')
+            localStorage.removeItem('glm-user')
+            sessionStorage.removeItem('glm-user')
             this.$store.commit('resetUser')
             this.$store.commit('checkUserId')
             this.$router.push('login')
