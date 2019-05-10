@@ -54,6 +54,7 @@ export default new Vuex.Store({
       })
       .then(res => {
         commit('setDate', res.data[0].date)
+        console.log('Date set to: ', res.data[0].date)
       })
       .catch(error => {
         console.log(error)

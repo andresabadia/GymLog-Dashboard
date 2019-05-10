@@ -64,7 +64,6 @@ export default {
     }
   },
   created(){
-    console.log('Dashboard created')
     this.$store.dispatch('asyncSetDate')
   },
   beforeRouteEnter (to, from, next) {
