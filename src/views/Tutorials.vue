@@ -12,6 +12,10 @@
 import Store from '../store.js'
 import YouTube from '../components/YouTube.vue'
 export default {
+  created(){
+    this.$store.dispatch('asyncSetDate')
+    this.$store.dispatch('asyncSetBranches', Store.state.glUser.gym_id)
+  },
   beforeRouteEnter (to, from, next) {
     console.log('this store: ',Store.state.userId)
     if(Store.state.userId){

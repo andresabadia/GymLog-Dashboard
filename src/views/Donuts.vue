@@ -124,7 +124,8 @@ export default {
     }
   },
   props:[
-    'currency'
+    'currency',
+    'branch'
   ],
   watch: {
     currency(){
@@ -165,7 +166,7 @@ export default {
         'colors': colors,
         'currency': "'"+this.currency+"'",
         'gym_id':Store.state.glUser.gym_id,
-        // 'branch':"'%'"
+        'branch':this.branch
       })
       .then(res => {
         this.$store.commit('showLoading', false)

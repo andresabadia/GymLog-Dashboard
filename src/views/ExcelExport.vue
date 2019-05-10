@@ -5,6 +5,12 @@
       <p>Actualizado {{date($store.state.glUser.date)}} - {{formatedDate($store.state.glUser.date)}}</p>
     </div>  
     <div class="buttons-container">
+      <div class="btn-group" v-if="$store.state.branches.lenght>1">
+        <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownBranchToggle=!dropdownBranchToggle">{{$store.state.branches[selectedBranchIndex]}}<span class="caret"></span></button>
+        <ul class="dropdown-menu scrollable-menu" :style="dropdownBranchToggle?'display:block':''">
+          <li v-for="(branch, index) in $store.state.branches" :key="branch" @click="selectedBranchIndex=index; dropdownBranchToggle=!dropdownBranchToggle" :class="selectedBranchIndex==index?'selected':''">{{branch}}</li>
+        </ul>
+      </div>
       <div class="btn-group">
         <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownToggle=!dropdownToggle">{{selections[selectedIndex]}}<span class="caret"></span></button>
         <ul class="dropdown-menu scrollable-menu" :style="dropdownToggle?'display:block':''">
@@ -13,7 +19,8 @@
       </div>
       <form action="php/index.php" target="_blank" method="POST">
         <input type="hidden" name="gym_id" :value="$store.state.glUser.gym_id">  
-        <input type="hidden" name="month" :value="selections[selectedIndex]">  
+        <input type="hidden" name="month" :value="branchSelection">  
+        <input type="hidden" name="branch" :value="selections[selectedIndex]">  
         <button class="btn btn-color-primary" type="submit">Exportar Excel</button>
       </form>
     </div>
@@ -30,7 +37,18 @@ export default {
     return{
       selectedIndex: 0,
       dropdownToggle: false,
+      selectedBranchIndex: 0,
+      dropdownBranchToggle: false,
       selections:['2019-04','2019-03','2019-02']
+    }
+  },
+  computed:{
+    branchSelection(){
+      if(this.$store.state.branches.lenght > 1){
+        return "'"+this.$store.state.branches[this.selectedBranchIndex]+"'"
+      } else {        
+        return "'%'"
+      }
     }
   },
   methods:{
@@ -63,6 +81,7 @@ export default {
   created(){
     this.$store.dispatch('asyncSetDate')
     this.populateDropdown()
+    this.$store.dispatch('asyncSetBranches', Store.state.glUser.gym_id)
   },
   beforeRouteEnter (to, from, next) {
     console.log('this store: ',Store.state.userId)

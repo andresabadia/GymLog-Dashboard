@@ -5,6 +5,12 @@
       <p>Actualizado {{date($store.state.glUser.date)}} - {{formatedDate($store.state.glUser.date)}}</p>
     </div>  
     <div class="btn-container">
+      <div class="btn-group" v-if="$store.state.branches.lenght>1">
+        <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownBranchToggle=!dropdownBranchToggle">{{$store.state.branches[selectedBranchIndex]}}<span class="caret"></span></button>
+        <ul class="dropdown-menu scrollable-menu" :style="dropdownBranchToggle?'display:block':''">
+          <li v-for="(branch, index) in $store.state.branches" :key="branch" @click="selectedBranchIndex=index; dropdownBranchToggle=!dropdownBranchToggle" :class="selectedBranchIndex==index?'selected':''">{{branch}}</li>
+        </ul>
+      </div>
       <div class="btn-group">
         <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownToggle=!dropdownToggle">{{currencies[selectedIndex]}}<span class="caret"></span></button>
         <ul class="dropdown-menu scrollable-menu" :style="dropdownToggle?'display:block':''">
@@ -12,8 +18,8 @@
         </ul>
       </div>
     </div>
-    <donuts :currency="currencies[selectedIndex]"></donuts>
-    <graphs :currency="currencies[selectedIndex]"></graphs>
+    <donuts :currency="currencies[selectedIndex]" :branch="branchSelection"></donuts>
+    <graphs :currency="currencies[selectedIndex]" :branch="branchSelection"></graphs>
   </div>
 </template>
 <script>
@@ -25,16 +31,27 @@ export default {
   data(){
     return{
       dropdownToggle: false,
+      dropdownBranchToggle: false,
       currencies:[
         'USD',
         'C$'
       ],
-      selectedIndex:0
+      selectedIndex:0,
+      selectedBranchIndex:0
     }
   },
   components: {
     Donuts,
     Graphs
+  },
+  computed:{
+    branchSelection(){
+      if(this.$store.state.branches.lenght > 1){
+        return "'"+this.$store.state.branches[this.selectedBranchIndex]+"'"
+      } else {        
+        return "'%'"
+      }
+    }
   },
   methods:{
     date(date) {
@@ -65,10 +82,11 @@ export default {
   },
   created(){
     this.$store.dispatch('asyncSetDate')
+    this.$store.dispatch('asyncSetBranches', Store.state.glUser.gym_id)
   },
   beforeRouteEnter (to, from, next) {
-    if(Store.state.userId){
-    // if(true){
+    // if(Store.state.userId){
+    if(true){
       next()
     } else {
       next(false)

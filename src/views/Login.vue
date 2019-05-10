@@ -77,6 +77,7 @@ export default {
                 sessionStorage.setItem('glm-user', JSON.stringify(res.data.content))
                 this.$router.push('home')
               }
+              this.$store.dispatch('asyncSetBranches', res.data.content.gym_id)
             } else if (res.data.response == "FAILED") {
               this.serverResponse = res.data.content
             }

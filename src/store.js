@@ -14,7 +14,8 @@ export default new Vuex.Store({
       gym_owner: 'Owner',
       date: '2019-04-25 21:59:12.718',
       gym_id: ''
-    }
+    },
+    branches:[]
   },
   mutations: {
     showLoading:(state, payload)=>{
@@ -45,6 +46,15 @@ export default new Vuex.Store({
     },
     setDate: (state, payload) => {
       state.glUser.date = payload
+    },
+    setBranches: (state, payload) => {
+      if(payload.length>1){        
+        state.branches.push("%")
+      }
+      payload.forEach(element => {
+        state.branches.push(element.branch)
+      });
+      console.log('setBranches: ',state.branches)
     }
   },
   actions: {
@@ -54,11 +64,23 @@ export default new Vuex.Store({
       })
       .then(res => {
         commit('setDate', res.data[0].date)
-        console.log('Date set to: ', res.data[0].date)
       })
       .catch(error => {
         console.log(error)
       })
+    },
+    asyncSetBranches: ({commit, state}, payload) => {
+      if (state.branches.length == 0){
+        axios.post('php/branch_drop_down.php',{
+          'gym_id':payload
+        })
+        .then(res => {
+          commit('setBranches', res.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      }
     }
   }
 })

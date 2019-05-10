@@ -164,6 +164,7 @@ export default {
         "gym_id": "uf",
         "x": "day",
         "currency": "'USD'",
+        "branch":"'%'",
         "gender_m": "'m'",
         "gender_f": "'f'",
         "occ_student": "'Student','Estudiante'",
@@ -222,7 +223,8 @@ export default {
     }
   },
   props:[
-    'currency'
+    'currency',
+    'branch'
   ],
   components: {
     Chart,
@@ -310,6 +312,7 @@ export default {
 
       serverRequestJSON.x = this.selection.x
       serverRequestJSON.currency = "'"+this.currency+"'"
+      serverRequestJSON.branch = this.branch
       serverRequestJSON.gym_id = Store.state.glUser.gym_id
 
       if(!this.selection.gender_m){
