@@ -15,6 +15,7 @@ export default {
   },
   created(){
     this.$store.commit('checkUserId')
+    this.$router.push('home')
   }
 }
 </script>

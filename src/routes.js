@@ -5,9 +5,7 @@ import Login from './views/Login.vue'
 
 Vue.use(Router)
 
-export default new Router({
-  // mode: 'history',
-  routes: [
+export const routes= [
     {
       path: '*',
       redirect: '/'
@@ -21,7 +19,9 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login,
-      title: 'Login'
+      meta:{
+        title: 'Login'
+      }
     },
     {
       path: '/excel-export',
@@ -30,13 +30,17 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/ExcelExport.vue'),
-      title: 'Excel Export'
+      meta:{
+        title: 'Excel Export'
+      }
     },
     {
       path: '/dashboard',
       name: 'dashboard',
       component: () => import('./views/Dashboard.vue'),
-      title: 'Dashboard'
+      meta:{
+        title: 'Dashboard'
+      }
     },
     // {
     //   path: '/tables',
@@ -57,7 +61,8 @@ export default new Router({
       path: '/tutorials',
       name: 'tutorials',
       component: () => import('./views/Tutorials.vue'),
-      title: 'Tutorials'
+      meta:{
+        title: 'Tutorials'
+      }
     }
   ]
-})
