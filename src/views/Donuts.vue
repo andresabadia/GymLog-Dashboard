@@ -130,6 +130,9 @@ export default {
   watch: {
     currency(){
       this.donutChart(this.filterColor)
+    },
+    branch(){
+      this.donutChart(this.filterColor)
     }
   },
   created(){

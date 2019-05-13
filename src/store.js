@@ -22,7 +22,6 @@ export default new Vuex.Store({
       state.loading = payload
     },
     checkUserId: (state, payload)=>{
-      console.log(localStorage.getItem('glm-user'),sessionStorage.getItem('glm-user'))
       if (localStorage.getItem('glm-user')!=null || sessionStorage.getItem('glm-user')!=null){
         state.userId = true
         if (localStorage.getItem('glm-user')!=null){
@@ -30,10 +29,8 @@ export default new Vuex.Store({
         } else {
           state.glUser = JSON.parse(sessionStorage.getItem('glm-user'))
         }        
-        console.log('user id set to true')
       } else {
         state.userId = false
-        console.log('user id set to false')
       }
     },
     resetUser: (state, payload)=>{
@@ -54,7 +51,6 @@ export default new Vuex.Store({
       payload.forEach(element => {
         state.branches.push(element.branch)
       });
-      console.log('setBranches: ',state.branches)
     }
   },
   actions: {

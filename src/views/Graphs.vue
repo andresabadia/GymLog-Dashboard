@@ -243,6 +243,9 @@ export default {
     },
     currency(){
       this.changeJSON()
+    },
+    branch(){
+      this.changeJSON()
     }
   },
   created(){

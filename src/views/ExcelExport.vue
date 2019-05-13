@@ -5,22 +5,28 @@
       <p>Actualizado {{date($store.state.glUser.date)}} - {{formatedDate($store.state.glUser.date)}}</p>
     </div>  
     <div class="buttons-container">
-      <div class="btn-group" v-if="$store.state.branches.lenght>1">
-        <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownBranchToggle=!dropdownBranchToggle">{{$store.state.branches[selectedBranchIndex]}}<span class="caret"></span></button>
+      <div class="btn-group" v-if="$store.state.branches.length>1">
+        <div>
+          <div class="btn-group-title">Sucursal</div>
+          <button type="button" class="btn btn-dropdown dropdown-toggle" style="width:150px;" @click="dropdownBranchToggle=!dropdownBranchToggle">{{$store.state.branches[selectedBranchIndex] | allBranches}}<span class="caret"></span></button>
+        </div>
         <ul class="dropdown-menu scrollable-menu" :style="dropdownBranchToggle?'display:block':''">
-          <li v-for="(branch, index) in $store.state.branches" :key="branch" @click="selectedBranchIndex=index; dropdownBranchToggle=!dropdownBranchToggle" :class="selectedBranchIndex==index?'selected':''">{{branch}}</li>
+          <li style="width:150px;" v-for="(branch, index) in $store.state.branches" :key="branch" @click="selectedBranchIndex=index; dropdownBranchToggle=!dropdownBranchToggle" :class="selectedBranchIndex==index?'selected':''">{{branch | allBranches}}</li>
         </ul>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownToggle=!dropdownToggle">{{selections[selectedIndex]}}<span class="caret"></span></button>
+        <div>
+          <div class="btn-group-title">Mes</div>
+          <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownToggle=!dropdownToggle">{{selections[selectedIndex]}}<span class="caret"></span></button>
+        </div>
         <ul class="dropdown-menu scrollable-menu" :style="dropdownToggle?'display:block':''">
           <li v-for="(selection, index) in selections" :key="selection" @click="selectedIndex=index; dropdownToggle=!dropdownToggle" :class="selectedIndex==index?'selected':''">{{selection}}</li>
         </ul>
       </div>
       <form action="php/index.php" target="_blank" method="POST">
         <input type="hidden" name="gym_id" :value="$store.state.glUser.gym_id">  
-        <input type="hidden" name="month" :value="branchSelection">  
-        <input type="hidden" name="branch" :value="selections[selectedIndex]">  
+        <input type="hidden" name="month" :value="selections[selectedIndex]">  
+        <input type="hidden" name="branch" :value="branchSelection">  
         <button class="btn btn-color-primary" type="submit">Exportar Excel</button>
       </form>
     </div>
@@ -44,16 +50,23 @@ export default {
   },
   computed:{
     branchSelection(){
-      if(this.$store.state.branches.lenght > 1){
+      if(this.$store.state.branches.length > 1){
         return "'"+this.$store.state.branches[this.selectedBranchIndex]+"'"
       } else {        
         return "'%'"
+      }
+    },
+    localStorageBranchIndex(){
+      let index = parseInt(localStorage.getItem('glm-selectedBranchIndex'))
+      if(localStorage.getItem('glm-selectedBranchIndex') != null || Store.state.branches.length >= index+1){
+        return index
+      } else {
+        return 0
       }
     }
   },
   methods:{
     populateDropdown(){
-      console.log('populateDropdown',Store.state.glUser.gym_id)
       this.$store.commit('showLoading', true)
       axios.post('php/months_drop_down.php',{
         'gym_id': Store.state.glUser.gym_id
@@ -64,7 +77,6 @@ export default {
         res.data.forEach(item => {
           this.selections.push(item.months)
         });
-        console.log(res.data)
       })
       .catch(error => {
         this.$store.commit('showLoading', false)
@@ -77,19 +89,33 @@ export default {
     formatedDate(date){
       return moment(date).format('dddd D [de] MMMM YYYY, h:mm a')
     }
-  },  
+  }, 
+  watch:{
+    selectedBranchIndex(){
+      localStorage.setItem('glm-selectedBranchIndex', this.selectedBranchIndex)
+    }
+  }, 
   created(){
     this.$store.dispatch('asyncSetDate')
     this.populateDropdown()
-    this.$store.dispatch('asyncSetBranches', Store.state.glUser.gym_id)
+    this.$store.dispatch('asyncSetBranches', Store.state.glUser.gym_id)    
+    this.selectedBranchIndex = this.localStorageBranchIndex
   },
   beforeRouteEnter (to, from, next) {
-    console.log('this store: ',Store.state.userId)
     // if(true){
     if(Store.state.userId){
       next()
     } else {
       next(false)
+    }
+  },
+  filters:{
+    allBranches: value => {
+      if(value=="%"){
+        return "todas"
+      } else {
+        return value
+      }
     }
   }
 }
@@ -123,6 +149,22 @@ export default {
 .buttons-container{
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
+}
+.buttons-container{
+  display: flex;
+  align-items: flex-end;
+}
+.buttons-container form{
+  margin-bottom:5px;
+}
+.btn-group{
+  margin-bottom: 5px; 
+}
+.btn-group-title{
+  font-size: 0.75rem;
+  text-align: left;
+  margin: 0 5px;
 }
 .btn{
   margin: 0 5px;
@@ -131,6 +173,7 @@ export default {
   color: #ffab00;
   background-color: #424242;
   border-color: #424242;
+  width: 100px;
 }
 .dropdown-menu{
   min-width: 6.2rem;
@@ -139,10 +182,12 @@ export default {
   height: auto;
   max-height: 200px;
   overflow-x: hidden;
+  margin: .125rem 5px 0;
 }
 .scrollable-menu li{
   cursor: pointer;
-  padding: 0 10px;
+  padding: 0 10px;  
+  width: 100px;
 }
 .scrollable-menu li:hover{
   background-color: #ffab0075;

@@ -17,7 +17,6 @@ export default {
     this.$store.dispatch('asyncSetBranches', Store.state.glUser.gym_id)
   },
   beforeRouteEnter (to, from, next) {
-    console.log('this store: ',Store.state.userId)
     if(Store.state.userId){
     // if(true){
       next()

@@ -13,8 +13,7 @@ export default {
     Loading,
     Navigation
   },
-  created(){      
-    console.log('App created check user id')  
+  created(){
     this.$store.commit('checkUserId')
   }
 }
