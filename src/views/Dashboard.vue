@@ -35,6 +35,16 @@ export default {
     Donuts,
     Graphs
   },
+  computed:{
+    localStorageIndex(){
+      let index = parseInt(localStorage.getItem('glm-selectedIndex'))
+      if(localStorage.getItem('glm-selectedIndex') != null){
+        return index
+      } else {
+        return 0
+      }
+    }
+  },
   methods:{
     date(date) {
       return moment(date).fromNow();
@@ -42,6 +52,15 @@ export default {
     formatedDate(date){
       return moment(date).format('dddd D [de] MMMM YYYY, h:mm a')
     }
+  },
+  watch:{
+    selectedIndex(){
+      localStorage.setItem('gl-selectedIndex', this.selectedIndex)
+    }
+  },
+  created(){    
+    this.$store.dispatch('asyncSetDate')
+    this.selectedIndex = this.localStorageIndex
   },
   beforeRouteEnter (to, from, next) {
     console.log('this store: ',Store.state.userId)

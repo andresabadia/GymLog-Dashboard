@@ -12,6 +12,9 @@
 import Store from '../store.js'
 import YouTube from '../components/YouTube.vue'
 export default {
+  created(){
+    this.$store.dispatch('asyncSetDate')
+  },
   beforeRouteEnter (to, from, next) {
     console.log('this store: ',Store.state.userId)
     if(Store.state.userId){

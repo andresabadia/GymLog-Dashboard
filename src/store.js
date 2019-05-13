@@ -40,9 +40,22 @@ export default new Vuex.Store({
         date: '2019-04-25 21:59:12.718',
         gym_id: ''
       }
+    },
+    setDate: (state, payload) => {
+      state.glUser.date = payload
     }
   },
   actions: {
-
+    asyncSetDate: ({commit, state}, payload) => {
+      axios.post('php/last_update.php',{
+        'gym_id':state.glUser.gym_id
+      })
+      .then(res => {
+        commit('setDate', res.data[0].date)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
   }
 })

@@ -61,6 +61,7 @@ export default {
     }
   },  
   created(){
+    this.$store.dispatch('asyncSetDate')
     this.populateDropdown()
   },
   beforeRouteEnter (to, from, next) {
