@@ -16,6 +16,7 @@ export default {
   created(){      
     // console.log('App created check user id')  
     this.$store.commit('checkUserId')
+    this.$router.push('home')
   }
 }
 </script>

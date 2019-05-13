@@ -37,8 +37,8 @@ export default {
   },
   computed:{
     localStorageIndex(){
-      let index = parseInt(localStorage.getItem('glm-selectedIndex'))
-      if(localStorage.getItem('glm-selectedIndex') != null){
+      let index = parseInt(localStorage.getItem('gl-selectedIndex'))
+      if(localStorage.getItem('gl-selectedIndex') != null){
         return index
       } else {
         return 0

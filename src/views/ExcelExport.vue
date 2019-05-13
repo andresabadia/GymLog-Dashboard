@@ -46,7 +46,7 @@ export default {
         res.data.forEach(item => {
           this.selections.push(item.months)
         });
-        console.log(res.data)
+        // console.log(res.data)
       })
       .catch(error => {
         this.$store.commit('showLoading', false)
