@@ -14,7 +14,7 @@ export default {
     Navigation
   },
   created(){      
-    console.log('App created check user id')  
+    // console.log('App created check user id')  
     this.$store.commit('checkUserId')
   }
 }

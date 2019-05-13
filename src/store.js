@@ -19,7 +19,7 @@ export default new Vuex.Store({
       state.loading = payload
     },
     checkUserId: (state, payload)=>{
-      console.log(localStorage.getItem('gl-user'),sessionStorage.getItem('gl-user'))
+      // console.log(localStorage.getItem('gl-user'),sessionStorage.getItem('gl-user'))
       if (localStorage.getItem('gl-user')!=null || sessionStorage.getItem('gl-user')!=null){
         state.userId = true
         if (localStorage.getItem('gl-user')!=null){
@@ -27,10 +27,10 @@ export default new Vuex.Store({
         } else {
           state.glUser = JSON.parse(sessionStorage.getItem('gl-user'))
         }        
-        console.log('user id set to true')
+        // console.log('user id set to true')
       } else {
         state.userId = false
-        console.log('user id set to false')
+        // console.log('user id set to false')
       }
     },
     resetUser: (state, payload)=>{

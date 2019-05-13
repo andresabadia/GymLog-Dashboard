@@ -35,7 +35,7 @@ export default {
   },
   methods:{
     populateDropdown(){
-      console.log('populateDropdown',Store.state.glUser.gym_id)
+      // console.log('populateDropdown',Store.state.glUser.gym_id)
       this.$store.commit('showLoading', true)
       axios.post('php/months_drop_down.php',{
         'gym_id': Store.state.glUser.gym_id
@@ -65,7 +65,7 @@ export default {
     this.populateDropdown()
   },
   beforeRouteEnter (to, from, next) {
-    console.log('this store: ',Store.state.userId)
+    // console.log('this store: ',Store.state.userId)
     // if(true){
     if(Store.state.userId){
       next()

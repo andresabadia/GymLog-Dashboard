@@ -13,7 +13,7 @@ export default {
     HelloWorld
   },
   created(){
-    console.log('home created, userID: ' + this.$store.state.userId)
+    // console.log('home created, userID: ' + this.$store.state.userId)
     
     this.$store.commit('checkUserId')
     if(this.$store.state.userId){

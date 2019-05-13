@@ -16,7 +16,7 @@ export default {
     this.$store.dispatch('asyncSetDate')
   },
   beforeRouteEnter (to, from, next) {
-    console.log('this store: ',Store.state.userId)
+    // console.log('this store: ',Store.state.userId)
     if(Store.state.userId){
     // if(true){
       next()

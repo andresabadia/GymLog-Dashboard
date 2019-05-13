@@ -68,7 +68,7 @@ export default {
 				'pin': pin
       })
         .then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             if (res.data.response == "OK"){
               if(this.rememberMe){                
                 localStorage.setItem('gl-user', JSON.stringify(res.data.content))
@@ -90,7 +90,7 @@ export default {
     CheckboxButtons
   },
   beforeRouteEnter (to, from, next) {
-    console.log('this store: ',Store.state.userId)
+    // console.log('this store: ',Store.state.userId)
     if(!Store.state.userId){
       next()
     } else {
