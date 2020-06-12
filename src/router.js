@@ -44,12 +44,12 @@ export default new Router({
     //   path: '/graphs',
     //   name: 'graphs',
     //   component: () => import('./views/Graphs.vue')
-    // },    
+    // },
     // {
     //   path: '/donuts',
     //   name: 'donuts',
     //   component: () => import('./views/Donuts.vue')
-    // },    
+    // },
     {
       path: '/tutorials',
       name: 'tutorials',

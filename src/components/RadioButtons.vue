@@ -6,20 +6,20 @@
 </template>
 <script>
 export default {
-    props:[
-        'value',
-        'radioValue'
-    ],
-    computed:{
-      radioButtonValue:{
-        get(){
-          return this.value
-        },
-        set(){
-          this.$emit('change', this.radioValue)
-        }
+  props: [
+    'value',
+    'radioValue'
+  ],
+  computed: {
+    radioButtonValue: {
+      get () {
+        return this.value
+      },
+      set () {
+        this.$emit('change', this.radioValue)
       }
     }
+  }
 }
 </script>
 <style scoped>
@@ -86,12 +86,10 @@ export default {
 	border-radius: 50%;
 	background: #424242;
 }
-@media only screen and (min-width: 576px) {  
+@media only screen and (min-width: 576px) {
 .radio-container {
   padding-left: 35px;
   margin-right: 24px;
 }
 }
 </style>
-
-

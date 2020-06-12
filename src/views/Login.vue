@@ -1,5 +1,5 @@
 <template>
-  <div class="login">    
+  <div class="login">
     <div class="container">
       <div class="d-flex justify-content-center h-100">
         <div class="card">
@@ -15,7 +15,7 @@
                   <span class="input-group-text"><i class="fas fa-user"></i></span>
                 </div>
                 <input type="text" class="form-control" placeholder="nombre de usuario" v-model="username">
-                
+
               </div>
               <div class="input-group form-group">
                 <div class="input-group-prepend">
@@ -24,7 +24,7 @@
                 <input type="password" class="form-control" placeholder="pin" v-model="pin" @keyup.enter="login(username, pin)">
               </div>
               <div class="row align-items-center remember">
-                <CheckboxButtons 
+                <CheckboxButtons
                   style="font-size:inherit;
                     margin-left: 15px;"
                     v-model="rememberMe">
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-   
+
   </div>
 </template>
 
@@ -53,45 +53,45 @@ import axios from 'axios'
 import CheckboxButtons from '../components/CheckboxButtons.vue'
 import Store from '../store.js'
 export default {
-  data(){
-    return{
-      username:'',
-      pin:'',
+  data () {
+    return {
+      username: '',
+      pin: '',
       serverResponse: '',
       rememberMe: false
     }
   },
   methods: {
-    login(username, pin){
+    login (username, pin) {
       axios.post('php/login.php', {
         'user': username,
-				'pin': pin
+        'pin': pin
       })
         .then(res => {
-            // console.log(res.data)
-            if (res.data.response == "OK"){
-              if(this.rememberMe){                
-                localStorage.setItem('gl-user', JSON.stringify(res.data.content))
-                this.$router.push('home')
-              } else {
-                sessionStorage.setItem('gl-user', JSON.stringify(res.data.content))
-                this.$router.push('home')
-              }
-            } else if (res.data.response == "FAILED") {
-              this.serverResponse = res.data.content
+          // console.log(res.data)
+          if (res.data.response == 'OK') {
+            if (this.rememberMe) {
+              localStorage.setItem('gl-user', JSON.stringify(res.data.content))
+              this.$router.push('home')
+            } else {
+              sessionStorage.setItem('gl-user', JSON.stringify(res.data.content))
+              this.$router.push('home')
             }
+          } else if (res.data.response == 'FAILED') {
+            this.serverResponse = res.data.content
+          }
         })
         .catch(error => {
-            console.log(error)
+          console.log(error)
         })
     }
   },
-  components:{
+  components: {
     CheckboxButtons
   },
   beforeRouteEnter (to, from, next) {
     // console.log('this store: ',Store.state.userId)
-    if(!Store.state.userId){
+    if (!Store.state.userId) {
       next()
     } else {
       next(false)

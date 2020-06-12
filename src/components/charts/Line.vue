@@ -21,7 +21,7 @@ export default {
   },
   watch: {
     change () {
-      this.renderChart(this.chartData, this.options)   
+      this.renderChart(this.chartData, this.options)
     }
   },
   mounted () {

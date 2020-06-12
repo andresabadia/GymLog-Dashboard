@@ -3,7 +3,7 @@
     <div class="dashboard-title">
       <div>Tablero de Administración - {{$store.state.glUser.gym_name}}</div>
       <p>Actualizado {{date($store.state.glUser.date)}} - {{formatedDate($store.state.glUser.date)}}</p>
-    </div>  
+    </div>
     <div class="btn-container">
       <div class="btn-group">
         <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownToggle=!dropdownToggle">{{currencies[selectedIndex]}}<span class="caret"></span></button>
@@ -21,50 +21,50 @@ import Donuts from './Donuts.vue'
 import Graphs from './Graphs.vue'
 import Store from '../store.js'
 export default {
-  data(){
-    return{
+  data () {
+    return {
       dropdownToggle: false,
-      currencies:[
+      currencies: [
         'USD',
         'C$'
       ],
-      selectedIndex:0
+      selectedIndex: 0
     }
   },
   components: {
     Donuts,
     Graphs
   },
-  computed:{
-    localStorageIndex(){
+  computed: {
+    localStorageIndex () {
       let index = parseInt(localStorage.getItem('gl-selectedIndex'))
-      if(localStorage.getItem('gl-selectedIndex') != null){
+      if (localStorage.getItem('gl-selectedIndex') != null) {
         return index
       } else {
         return 0
       }
     }
   },
-  methods:{
-    date(date) {
-      return moment(date).fromNow();
+  methods: {
+    date (date) {
+      return moment(date).fromNow()
     },
-    formatedDate(date){
+    formatedDate (date) {
       return moment(date).format('dddd D [de] MMMM YYYY, h:mm a')
     }
   },
-  watch:{
-    selectedIndex(){
+  watch: {
+    selectedIndex () {
       localStorage.setItem('gl-selectedIndex', this.selectedIndex)
     }
   },
-  created(){    
+  created () {
     this.$store.dispatch('asyncSetDate')
     this.selectedIndex = this.localStorageIndex
   },
   beforeRouteEnter (to, from, next) {
     // console.log('this store: ',Store.state.userId)
-    if(Store.state.userId){
+    if (Store.state.userId) {
     // if(true){
       next()
     } else {
@@ -75,7 +75,7 @@ export default {
 </script>
 <style>
   .card, .dashboard-title{
-    margin:10px;  
+    margin:10px;
     max-width: 1200px;
   }
   .dashboard-title{
@@ -119,7 +119,7 @@ export default {
   background-color: #ffab0075;
   color:inherit;
 }
-.selected{  
+.selected{
   background-color: #ffab00;
 }
  .card-header > h3{
@@ -129,7 +129,7 @@ export default {
 .card-body{
   padding:0.5rem;
 }
-@media only screen and (min-width: 576px) {  
+@media only screen and (min-width: 576px) {
   .card-body{
     padding:1.25rem;
   }
@@ -137,13 +137,13 @@ export default {
     margin: 0 20px;
  }
 }
-@media only screen and (min-width: 768px) {  
+@media only screen and (min-width: 768px) {
 
 }
-@media only screen and (min-width: 992px) {  
+@media only screen and (min-width: 992px) {
 
 }
-@media only screen and (min-width: 1200px) {  
+@media only screen and (min-width: 1200px) {
   .card, .dashboard-title{
     margin: 10px auto;
   }
@@ -152,4 +152,3 @@ export default {
  }
 }
 </style>
-

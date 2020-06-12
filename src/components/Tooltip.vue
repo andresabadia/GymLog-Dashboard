@@ -1,20 +1,20 @@
 <template>
   <div id="tooltip">
     <div class="tooltip-container">
-      <button class="tooltip-icon" @focus="showTooltip=true" @blur="showTooltip=false"><i class="fas fa-info-circle"></i></button>      
+      <button class="tooltip-icon" @focus="showTooltip=true" @blur="showTooltip=false"><i class="fas fa-info-circle"></i></button>
       <div :class="'tooltip-content-'+direction" v-if="showTooltip"><slot></slot></div>
     </div>
   </div>
-    
+
 </template>
 <script>
 export default {
-  data(){
-    return{
+  data () {
+    return {
       showTooltip: false
     }
   },
-  props:['direction']
+  props: ['direction']
 }
 </script>
 <style scoped>
@@ -87,5 +87,3 @@ export default {
   border-color: #424242e0 transparent transparent transparent;
 }
 </style>
-
-

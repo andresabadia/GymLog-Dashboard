@@ -6,9 +6,9 @@
 </template>
 <script>
 export default {
-    props:[
-        'value'
-    ]
+  props: [
+    'value'
+  ]
 }
 </script>
 <style scoped>
@@ -78,5 +78,3 @@ export default {
   transform: rotate(45deg);
 }
 </style>
-
-

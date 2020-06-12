@@ -41,8 +41,8 @@
               </div>
               <DonutChart :chartData="datacollection2" :options="options" :change="change"></DonutChart>
             </div>
-            <div class="donuts-title">Pagos {{currency}} <Tooltip direction="up">Muestra los ingresos en la moneda indicada desde inicios del mes divididos por categoría.</Tooltip></div>       
-          </div>  
+            <div class="donuts-title">Pagos {{currency}} <Tooltip direction="up">Muestra los ingresos en la moneda indicada desde inicios del mes divididos por categoría.</Tooltip></div>
+          </div>
           <div class="donuts-container-around">
             <div class="donuts-container">
               <div class="donuts-kpi-main">{{roundUp(currentMonth3)}}</div>
@@ -56,8 +56,8 @@
               </div>
               <DonutChart :chartData="datacollection3" :options="options" :change="change"></DonutChart>
             </div>
-            <div class="donuts-title">Accesos vigentes <Tooltip direction="up">Muestra los accesos vigentes, en otras palabras, el conteo de todos los clientes que en algún momento del mes en curso tuvieron derecho a usar las instalaciones. Esto no incluye a clientes que pagan por el pase del día. <i>Por ejemplo: si Juan pago una semana de acceso a finales del mes pasado y su acceso se extiende hasta el mes actual eso se contaría como un acceso en el mes corriente; si Juan vuelve a pagar otra semana de acceso en el mes actual eso no incrementa el conteo dado que ya contamos a Juan una vez; si Pedro paga por un pase del día eso no se contaría dado que los pases del día no cuentan.</i></Tooltip></div>       
-          </div>    
+            <div class="donuts-title">Accesos vigentes <Tooltip direction="up">Muestra los accesos vigentes, en otras palabras, el conteo de todos los clientes que en algún momento del mes en curso tuvieron derecho a usar las instalaciones. Esto no incluye a clientes que pagan por el pase del día. <i>Por ejemplo: si Juan pago una semana de acceso a finales del mes pasado y su acceso se extiende hasta el mes actual eso se contaría como un acceso en el mes corriente; si Juan vuelve a pagar otra semana de acceso en el mes actual eso no incrementa el conteo dado que ya contamos a Juan una vez; si Pedro paga por un pase del día eso no se contaría dado que los pases del día no cuentan.</i></Tooltip></div>
+          </div>
         </div>
         <div class="donuts-legend">
           <div>{{filterName}}: </div>
@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-   
+
   </div>
 </template>
 <script>
@@ -75,13 +75,13 @@ import RadioButtons from '../components/RadioButtons.vue'
 import Tooltip from '../components/Tooltip.vue'
 import Store from '../store.js'
 export default {
-  data(){
-    return{
+  data () {
+    return {
       datacollection1: {
         labels: [],
         datasets: [
           {
-            backgroundColor: ["#424242","#ff8f00","#757575","#ffb300","#bdbdbd", "#ffca28","#eeeeee","#ffe082","#212121","#ff6f00","#616161","#ffa000","#9e9e9e","#ffc107","#e0e0e0","#ffd54f","#f5f5f5","#ffecb3"],
+            backgroundColor: ['#424242', '#ff8f00', '#757575', '#ffb300', '#bdbdbd', '#ffca28', '#eeeeee', '#ffe082', '#212121', '#ff6f00', '#616161', '#ffa000', '#9e9e9e', '#ffc107', '#e0e0e0', '#ffd54f', '#f5f5f5', '#ffecb3'],
             data: []
           }
         ]
@@ -92,7 +92,7 @@ export default {
         labels: [],
         datasets: [
           {
-            backgroundColor: ["#424242","#ff8f00","#757575","#ffb300","#bdbdbd", "#ffca28","#eeeeee","#ffe082","#212121","#ff6f00","#616161","#ffa000","#9e9e9e","#ffc107","#e0e0e0","#ffd54f","#f5f5f5","#ffecb3"],
+            backgroundColor: ['#424242', '#ff8f00', '#757575', '#ffb300', '#bdbdbd', '#ffca28', '#eeeeee', '#ffe082', '#212121', '#ff6f00', '#616161', '#ffa000', '#9e9e9e', '#ffc107', '#e0e0e0', '#ffd54f', '#f5f5f5', '#ffecb3'],
             data: []
           }
         ]
@@ -103,7 +103,7 @@ export default {
         labels: [],
         datasets: [
           {
-            backgroundColor: ["#424242","#ff8f00","#757575","#ffb300","#bdbdbd", "#ffca28","#eeeeee","#ffe082","#212121","#ff6f00","#616161","#ffa000","#9e9e9e","#ffc107","#e0e0e0","#ffd54f","#f5f5f5","#ffecb3"],
+            backgroundColor: ['#424242', '#ff8f00', '#757575', '#ffb300', '#bdbdbd', '#ffca28', '#eeeeee', '#ffe082', '#212121', '#ff6f00', '#616161', '#ffa000', '#9e9e9e', '#ffc107', '#e0e0e0', '#ffd54f', '#f5f5f5', '#ffecb3'],
             data: []
           }
         ]
@@ -111,105 +111,105 @@ export default {
       currentMonth3: 0,
       lastMonth3: 0,
       options: {
-        legend:{
+        legend: {
           display: false
         },
         responsive: true,
         maintainAspectRatio: true,
-        cutoutPercentage:50
+        cutoutPercentage: 50
       },
       change: 0,
-      filterName:'',
-      filterColor:'age_group'
+      filterName: '',
+      filterColor: 'age_group'
     }
   },
-  props:[
+  props: [
     'currency'
   ],
   watch: {
-    currency(){
+    currency () {
       this.donutChart(this.filterColor)
     }
   },
-  created(){
+  created () {
     this.donutChart(this.filterColor)
   },
-  methods:{
-    changeSelection(newValue){
+  methods: {
+    changeSelection (newValue) {
       this.filterColor = newValue
       this.donutChart(this.filterColor)
     },
-    roundUp(value){
+    roundUp (value) {
       return Math.round(value)
     },
-    replaceEmpty(value){
-      if(value==""){
-        return "Nulo"
+    replaceEmpty (value) {
+      if (value == '') {
+        return 'Nulo'
       } else {
         return value
       }
     },
-    filterNameMethod(color){
-      if(color=='age_group'){
-        this.filterName='Edades'
-      } else if(color=='gender'){
-        this.filterName='Sexo'
-      } else if(color=='occupation'){
-        this.filterName='Ocupación'
-      }      
+    filterNameMethod (color) {
+      if (color == 'age_group') {
+        this.filterName = 'Edades'
+      } else if (color == 'gender') {
+        this.filterName = 'Sexo'
+      } else if (color == 'occupation') {
+        this.filterName = 'Ocupación'
+      }
     },
-    donutChart(colors){
+    donutChart (colors) {
       this.filterNameMethod(colors)
       this.$store.commit('showLoading', true)
-      axios.post('php/donut.php',{
+      axios.post('php/donut.php', {
         'colors': colors,
-        'currency': "'"+this.currency+"'",
-        'gym_id':Store.state.glUser.gym_id
+        'currency': "'" + this.currency + "'",
+        'gym_id': Store.state.glUser.gym_id
       })
-      .then(res => {
-        this.$store.commit('showLoading', false)
-        // console.log(res)
-        //graph1
-        this.datacollection1.labels = []
-        this.datacollection1.datasets[0].data=[]
-        this.currentMonth1 = 0
+        .then(res => {
+          this.$store.commit('showLoading', false)
+          // console.log(res)
+          // graph1
+          this.datacollection1.labels = []
+          this.datacollection1.datasets[0].data = []
+          this.currentMonth1 = 0
 
-        res.data.graph1.donut.forEach(item => {
-          this.datacollection1.labels.push(this.replaceEmpty(item.color))
-          this.datacollection1.datasets[0].data.push(this.roundUp(item.count))
-          this.currentMonth1 += parseFloat(item.count)
-        });
-        this.lastMonth1 = res.data.graph1.last_month.count
-        //graph2
-        this.datacollection2.labels = []
-        this.datacollection2.datasets[0].data=[]
-        this.currentMonth2 = 0
+          res.data.graph1.donut.forEach(item => {
+            this.datacollection1.labels.push(this.replaceEmpty(item.color))
+            this.datacollection1.datasets[0].data.push(this.roundUp(item.count))
+            this.currentMonth1 += parseFloat(item.count)
+          })
+          this.lastMonth1 = res.data.graph1.last_month.count
+          // graph2
+          this.datacollection2.labels = []
+          this.datacollection2.datasets[0].data = []
+          this.currentMonth2 = 0
 
-        res.data.graph2.donut.forEach(item => {
-          this.datacollection2.labels.push(this.replaceEmpty(item.color))
-          this.datacollection2.datasets[0].data.push(this.roundUp(item.count))
-          // console.log(parseFloat(item.count))
-          this.currentMonth2 += parseFloat(item.count)
+          res.data.graph2.donut.forEach(item => {
+            this.datacollection2.labels.push(this.replaceEmpty(item.color))
+            this.datacollection2.datasets[0].data.push(this.roundUp(item.count))
+            // console.log(parseFloat(item.count))
+            this.currentMonth2 += parseFloat(item.count)
           // console.log(this.currentMonth2)
-        });
-        this.lastMonth2 = res.data.graph2.last_month.count
-        //graph3
-        this.datacollection3.labels = []
-        this.datacollection3.datasets[0].data=[]
-        this.currentMonth3 = 0
+          })
+          this.lastMonth2 = res.data.graph2.last_month.count
+          // graph3
+          this.datacollection3.labels = []
+          this.datacollection3.datasets[0].data = []
+          this.currentMonth3 = 0
 
-        res.data.graph3.donut.forEach(item => {
-          this.datacollection3.labels.push(this.replaceEmpty(item.color))
-          this.datacollection3.datasets[0].data.push(this.roundUp(item.count))
-          this.currentMonth3 += parseFloat(item.count)
-        });
-        this.lastMonth3 = res.data.graph3.last_month.count
-        this.change++
-      })
-      .catch(error => {
-        this.$store.commit('showLoading', false)
-        console.log(error)
-      })
+          res.data.graph3.donut.forEach(item => {
+            this.datacollection3.labels.push(this.replaceEmpty(item.color))
+            this.datacollection3.datasets[0].data.push(this.roundUp(item.count))
+            this.currentMonth3 += parseFloat(item.count)
+          })
+          this.lastMonth3 = res.data.graph3.last_month.count
+          this.change++
+        })
+        .catch(error => {
+          this.$store.commit('showLoading', false)
+          console.log(error)
+        })
     }
   },
   components: {
@@ -217,7 +217,7 @@ export default {
     RadioButtons,
     Tooltip
   },
-  filters:{
+  filters: {
     roundUpFilter: value => {
       return Math.round(value)
     }
@@ -226,7 +226,7 @@ export default {
 </script>
 <style scoped>
 .card{
-  /* margin:10px;  
+  /* margin:10px;
   max-width: 1200px; */
   /* background-color: rgba(0,0,0,0.2);
   border: 1px solid rgba(0,0,0,.125);
@@ -245,7 +245,7 @@ button{
   justify-content: space-around;
   flex-wrap: wrap;
 }
-.donuts-legend{  
+.donuts-legend{
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
@@ -272,7 +272,7 @@ button{
   position: absolute;
   z-index: -1;
 }
-.donuts-kpi-main{  
+.donuts-kpi-main{
   top:45%;
   left:50%;
   transform: translate(-50%, -50%);
@@ -299,7 +299,7 @@ button{
   padding-top: 10px;
   font-size: 110%;
 }
-@media only screen and (min-width: 576px) {  
+@media only screen and (min-width: 576px) {
   .donut-component{
     padding: 0px 10px;
   }
@@ -309,7 +309,7 @@ button{
   .donuts-container{
     width: 100%;
   }
-  .donuts-kpi-main{  
+  .donuts-kpi-main{
     font-size: 4vw;
   }
   .donuts-kpi-last{
@@ -319,12 +319,12 @@ button{
     font-size: 1vw;
   }
 }
-@media only screen and (min-width: 768px) {  
+@media only screen and (min-width: 768px) {
   .donuts-container{
     width: 249px;
     height: 249px;
   }
-  .donuts-kpi-main{  
+  .donuts-kpi-main{
     font-size: 2em;
   }
   .donuts-kpi-last{
@@ -334,12 +334,12 @@ button{
     font-size: 0.5em;
   }
 }
-@media only screen and (min-width: 992px) {  
+@media only screen and (min-width: 992px) {
   .donuts-container{
     width: 300px;
     height: 300px;
   }
-  .donuts-kpi-main{  
+  .donuts-kpi-main{
     font-size: 2.4em;
   }
   .donuts-kpi-last{
@@ -349,7 +349,7 @@ button{
     font-size: 0.6em;
   }
 }
-@media only screen and (min-width: 1200px) {  
+@media only screen and (min-width: 1200px) {
   .card{
     /* margin: 10px auto; */
   }

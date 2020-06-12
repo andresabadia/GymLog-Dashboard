@@ -6,19 +6,19 @@
 </template>
 <script>
 export default {
-    props:[
-        'value'
-    ],
-    data(){
-      return{
-        textTest:true
-      }
-    },
-    methods:{
-      testMethod(e){
-        console.log(e)
-      }
+  props: [
+    'value'
+  ],
+  data () {
+    return {
+      textTest: true
     }
+  },
+  methods: {
+    testMethod (e) {
+      console.log(e)
+    }
+  }
 }
 </script>
 <style scoped>
@@ -89,5 +89,3 @@ export default {
   transform: rotate(45deg);
 }
 </style>
-
-

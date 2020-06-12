@@ -7,7 +7,7 @@
       <div class="youtube-video-container-wrapper" v-if="showData">
         <div class="youtube-video-container">
           <iframe :src='"https://www.youtube-nocookie.com/embed/"+linkId+"?rel=0"'  frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-        </div>   
+        </div>
       </div>
     </transition>
   </div>
@@ -15,27 +15,27 @@
 
 <script>
 export default {
-  data(){
-    return{
-      showData: false,
+  data () {
+    return {
+      showData: false
     }
   },
-  props:[
+  props: [
     'question',
     'linkId'
   ],
-  methods:{
-    beforeEnter: function(el) {
-      el.style.height = '0';
+  methods: {
+    beforeEnter: function (el) {
+      el.style.height = '0'
     },
-    enter: function(el) {
-      el.style.height = el.scrollHeight + 'px';
+    enter: function (el) {
+      el.style.height = el.scrollHeight + 'px'
     },
-    beforeLeave: function(el) {
-      el.style.height = el.scrollHeight + 'px';
+    beforeLeave: function (el) {
+      el.style.height = el.scrollHeight + 'px'
     },
-    leave: function(el) {
-      el.style.height = '0';
+    leave: function (el) {
+      el.style.height = '0'
     }
   }
   // mounted(){
@@ -46,7 +46,7 @@ export default {
 
 <style scoped>
 .youtube-question{
-  display: inline-block;  
+  display: inline-block;
   cursor: pointer;
   font-size: 1.2rem;
   font-weight: normal;

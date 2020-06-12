@@ -1,15 +1,15 @@
 <template>
-    <div class="loading">        
+    <div class="loading">
         <Spinner></Spinner>
     </div>
 </template>
 <script>
 import Spinner from './Spinner.vue'
 export default {
-    components:{
-        Spinner
-    }
-    
+  components: {
+    Spinner
+  }
+
 }
 </script>
 <style scoped>

@@ -3,7 +3,7 @@
     <div class="excel-export-title">
       <div>Exportar tabla de datos</div>
       <p>Actualizado {{date($store.state.glUser.date)}} - {{formatedDate($store.state.glUser.date)}}</p>
-    </div>  
+    </div>
     <div class="buttons-container">
       <div class="btn-group">
         <button type="button" class="btn btn-dropdown dropdown-toggle" @click="dropdownToggle=!dropdownToggle">{{selections[selectedIndex]}}<span class="caret"></span></button>
@@ -12,8 +12,8 @@
         </ul>
       </div>
       <form action="php/index.php" target="_blank" method="POST">
-        <input type="hidden" name="gym_id" :value="$store.state.glUser.gym_id">  
-        <input type="hidden" name="month" :value="selections[selectedIndex]">  
+        <input type="hidden" name="gym_id" :value="$store.state.glUser.gym_id">
+        <input type="hidden" name="month" :value="selections[selectedIndex]">
         <button class="btn btn-color-primary" type="submit">Exportar Excel</button>
       </form>
     </div>
@@ -26,48 +26,48 @@
 import axios from 'axios'
 import Store from '../store.js'
 export default {
-  data(){
-    return{
+  data () {
+    return {
       selectedIndex: 0,
       dropdownToggle: false,
-      selections:['2019-04','2019-03','2019-02']
+      selections: ['2019-04', '2019-03', '2019-02']
     }
   },
-  methods:{
-    populateDropdown(){
+  methods: {
+    populateDropdown () {
       // console.log('populateDropdown',Store.state.glUser.gym_id)
       this.$store.commit('showLoading', true)
-      axios.post('php/months_drop_down.php',{
+      axios.post('php/months_drop_down.php', {
         'gym_id': Store.state.glUser.gym_id
       })
-      .then(res => {
-        this.$store.commit('showLoading', false)
-        this.selections = []
-        res.data.forEach(item => {
-          this.selections.push(item.months)
-        });
+        .then(res => {
+          this.$store.commit('showLoading', false)
+          this.selections = []
+          res.data.forEach(item => {
+            this.selections.push(item.months)
+          })
         // console.log(res.data)
-      })
-      .catch(error => {
-        this.$store.commit('showLoading', false)
-        console.log(error)
-      })
+        })
+        .catch(error => {
+          this.$store.commit('showLoading', false)
+          console.log(error)
+        })
     },
-    date(date) {
-      return moment(date).fromNow();
+    date (date) {
+      return moment(date).fromNow()
     },
-    formatedDate(date){
+    formatedDate (date) {
       return moment(date).format('dddd D [de] MMMM YYYY, h:mm a')
     }
-  },  
-  created(){
+  },
+  created () {
     this.$store.dispatch('asyncSetDate')
     this.populateDropdown()
   },
   beforeRouteEnter (to, from, next) {
     // console.log('this store: ',Store.state.userId)
     // if(true){
-    if(Store.state.userId){
+    if (Store.state.userId) {
       next()
     } else {
       next(false)
@@ -78,8 +78,8 @@ export default {
 
 <style scoped>
 .excel-export-title{
-  margin:10px;  
-  max-width: 1200px;    
+  margin:10px;
+  max-width: 1200px;
   margin-top: 30px;
   margin-bottom: 30px;
 }
@@ -96,7 +96,7 @@ export default {
     padding: 20px;
     margin: auto;
  }
- @media only screen and (min-width: 1200px) {  
+ @media only screen and (min-width: 1200px) {
   .excel-export-title{
     margin: 10px auto;
   }
@@ -129,11 +129,7 @@ export default {
   background-color: #ffab0075;
   color:inherit;
 }
-.selected{  
+.selected{
   background-color: #ffab00;
 }
 </style>
-
-
-
-

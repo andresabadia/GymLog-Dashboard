@@ -32,8 +32,8 @@
           </div>
           <DonutChart :chartData="datacollection2" :options="options" :change="change"></DonutChart>
         </div>
-        <div class="chart-title">Pagos USD</div>       
-      </div>  
+        <div class="chart-title">Pagos USD</div>
+      </div>
       <div class="chart-container-around">
         <div class="chart-container">
           <div class="chart-kpi-main">{{roundUp(currentMonth3)}}</div>
@@ -47,8 +47,8 @@
           </div>
           <DonutChart :chartData="datacollection3" :options="options" :change="change"></DonutChart>
         </div>
-        <div class="chart-title">Accesos vigentes</div>       
-      </div>    
+        <div class="chart-title">Accesos vigentes</div>
+      </div>
     </div>
     <br>
     <div class="radio-buttons-container">
@@ -56,7 +56,7 @@
       <span @click="donutChart('gender')"><RadioButtons>Sexo</RadioButtons></span>
       <span @click="donutChart('occupation')"><RadioButtons>Ocupación</RadioButtons></span>
     </div>
-   
+
   </div>
 </template>
 <script>
@@ -64,13 +64,13 @@ import axios from 'axios'
 import DonutChart from '../components/charts/Donut.vue'
 import RadioButtons from '../components/RadioButtons.vue'
 export default {
-  data(){
-    return{
+  data () {
+    return {
       datacollection1: {
         labels: [],
         datasets: [
           {
-            backgroundColor: ["#424242","#ff8f00","#757575","#ffb300","#bdbdbd", "#ffca28","#eeeeee","#ffe082","#212121","#ff6f00","#616161","#ffa000","#9e9e9e","#ffc107","#e0e0e0","#ffd54f","#f5f5f5","#ffecb3"],
+            backgroundColor: ['#424242', '#ff8f00', '#757575', '#ffb300', '#bdbdbd', '#ffca28', '#eeeeee', '#ffe082', '#212121', '#ff6f00', '#616161', '#ffa000', '#9e9e9e', '#ffc107', '#e0e0e0', '#ffd54f', '#f5f5f5', '#ffecb3'],
             data: []
           }
         ]
@@ -81,7 +81,7 @@ export default {
         labels: [],
         datasets: [
           {
-            backgroundColor: ["#424242","#ff8f00","#757575","#ffb300","#bdbdbd", "#ffca28","#eeeeee","#ffe082","#212121","#ff6f00","#616161","#ffa000","#9e9e9e","#ffc107","#e0e0e0","#ffd54f","#f5f5f5","#ffecb3"],
+            backgroundColor: ['#424242', '#ff8f00', '#757575', '#ffb300', '#bdbdbd', '#ffca28', '#eeeeee', '#ffe082', '#212121', '#ff6f00', '#616161', '#ffa000', '#9e9e9e', '#ffc107', '#e0e0e0', '#ffd54f', '#f5f5f5', '#ffecb3'],
             data: []
           }
         ]
@@ -92,7 +92,7 @@ export default {
         labels: [],
         datasets: [
           {
-            backgroundColor: ["#424242","#ff8f00","#757575","#ffb300","#bdbdbd", "#ffca28","#eeeeee","#ffe082","#212121","#ff6f00","#616161","#ffa000","#9e9e9e","#ffc107","#e0e0e0","#ffd54f","#f5f5f5","#ffecb3"],
+            backgroundColor: ['#424242', '#ff8f00', '#757575', '#ffb300', '#bdbdbd', '#ffca28', '#eeeeee', '#ffe082', '#212121', '#ff6f00', '#616161', '#ffa000', '#9e9e9e', '#ffc107', '#e0e0e0', '#ffd54f', '#f5f5f5', '#ffecb3'],
             data: []
           }
         ]
@@ -100,86 +100,86 @@ export default {
       currentMonth3: 0,
       lastMonth3: 0,
       options: {
-        legend:{
+        legend: {
           display: false
         },
         responsive: true,
         maintainAspectRatio: true,
-        cutoutPercentage:50
+        cutoutPercentage: 50
       },
-      change: 0,
+      change: 0
     }
   },
-  created(){
+  created () {
     this.donutChart('age_group')
   },
-  methods:{
-    roundUp(value){
+  methods: {
+    roundUp (value) {
       return Math.round(value)
     },
-    replaceEmpty(value){
-      if(value==""){
-        return "Nulo"
+    replaceEmpty (value) {
+      if (value == '') {
+        return 'Nulo'
       } else {
         return value
       }
     },
-    donutChart(colors){
+    donutChart (colors) {
       this.$store.commit('showLoading', true)
-      axios.post('php/donut.php',{
+      axios.post('php/donut.php', {
         'colors': colors
       })
-      .then(res => {
-        this.$store.commit('showLoading', false)
-        console.log(res)
-        //graph1
-        this.datacollection1.labels = []
-        this.datacollection1.datasets[0].data=[]
-        this.currentMonth1 = 0
+        .then(res => {
+          this.$store.commit('showLoading', false)
+          console.log(res)
+          // graph1
+          this.datacollection1.labels = []
+          this.datacollection1.datasets[0].data = []
+          this.currentMonth1 = 0
 
-        res.data.graph1.donut.forEach(item => {
-          this.datacollection1.labels.push(this.replaceEmpty(item.color))
-          this.datacollection1.datasets[0].data.push(this.roundUp(item.count))
-          this.currentMonth1 += parseFloat(item.count)
-        });
-        this.lastMonth1 = res.data.graph1.last_month.count
-        //graph2
-        this.datacollection2.labels = []
-        this.datacollection2.datasets[0].data=[]
-        this.currentMonth2 = 0
+          res.data.graph1.donut.forEach(item => {
+            this.datacollection1.labels.push(this.replaceEmpty(item.color))
+            this.datacollection1.datasets[0].data.push(this.roundUp(item.count))
+            this.currentMonth1 += parseFloat(item.count)
+          })
+          this.lastMonth1 = res.data.graph1.last_month.count
+          // graph2
+          this.datacollection2.labels = []
+          this.datacollection2.datasets[0].data = []
+          this.currentMonth2 = 0
 
-        res.data.graph2.donut.forEach(item => {
-          this.datacollection2.labels.push(this.replaceEmpty(item.color))
-          this.datacollection2.datasets[0].data.push(this.roundUp(item.count))
-          console.log(parseFloat(item.count))
-          this.currentMonth2 += parseFloat(item.count)
-          console.log(this.currentMonth2)
-        });
-        this.lastMonth2 = res.data.graph2.last_month.count
-        //graph3
-        this.datacollection3.labels = []
-        this.datacollection3.datasets[0].data=[]
-        this.currentMonth3 = 0
+          res.data.graph2.donut.forEach(item => {
+            this.datacollection2.labels.push(this.replaceEmpty(item.color))
+            this.datacollection2.datasets[0].data.push(this.roundUp(item.count))
+            console.log(parseFloat(item.count))
+            this.currentMonth2 += parseFloat(item.count)
+            console.log(this.currentMonth2)
+          })
+          this.lastMonth2 = res.data.graph2.last_month.count
+          // graph3
+          this.datacollection3.labels = []
+          this.datacollection3.datasets[0].data = []
+          this.currentMonth3 = 0
 
-        res.data.graph3.donut.forEach(item => {
-          this.datacollection3.labels.push(this.replaceEmpty(item.color))
-          this.datacollection3.datasets[0].data.push(this.roundUp(item.count))
-          this.currentMonth3 += parseFloat(item.count)
-        });
-        this.lastMonth3 = res.data.graph3.last_month.count
-        this.change++
-      })
-      .catch(error => {
-        this.$store.commit('showLoading', false)
-        console.log(error)
-      })
+          res.data.graph3.donut.forEach(item => {
+            this.datacollection3.labels.push(this.replaceEmpty(item.color))
+            this.datacollection3.datasets[0].data.push(this.roundUp(item.count))
+            this.currentMonth3 += parseFloat(item.count)
+          })
+          this.lastMonth3 = res.data.graph3.last_month.count
+          this.change++
+        })
+        .catch(error => {
+          this.$store.commit('showLoading', false)
+          console.log(error)
+        })
     }
   },
   components: {
     DonutChart,
     RadioButtons
   },
-  filters:{
+  filters: {
     roundUpFilter: value => {
       return Math.round(value)
     }
@@ -201,7 +201,7 @@ button{
   justify-content: space-around;
   flex-wrap: wrap;
 }
-.chart-legend{  
+.chart-legend{
   margin-top:50px;
   margin-bottom: 20px;
   display: flex;
@@ -228,7 +228,7 @@ button{
   position: absolute;
   z-index: -1;
 }
-.chart-kpi-main{  
+.chart-kpi-main{
   top:45%;
   left:50%;
   transform: translate(-50%, -50%);
@@ -254,7 +254,7 @@ button{
   font-weight: bold;
   padding-top: 10px;
 }
-@media only screen and (min-width: 576px) {  
+@media only screen and (min-width: 576px) {
   .donut-component{
     padding: 0px 10px;
   }
@@ -264,7 +264,7 @@ button{
   .chart-container{
     width: 100%;
   }
-  .chart-kpi-main{  
+  .chart-kpi-main{
     font-size: 4vw;
   }
   .chart-kpi-last{
@@ -274,12 +274,12 @@ button{
     font-size: 1vw;
   }
 }
-@media only screen and (min-width: 768px) {  
+@media only screen and (min-width: 768px) {
   .chart-container{
     width: 249px;
     height: 249px;
   }
-  .chart-kpi-main{  
+  .chart-kpi-main{
     font-size: 2em;
   }
   .chart-kpi-last{
@@ -289,12 +289,12 @@ button{
     font-size: 0.5em;
   }
 }
-@media only screen and (min-width: 992px) {  
+@media only screen and (min-width: 992px) {
   .chart-container{
     width: 300px;
     height: 300px;
   }
-  .chart-kpi-main{  
+  .chart-kpi-main{
     font-size: 2.4em;
   }
   .chart-kpi-last{
@@ -304,7 +304,7 @@ button{
     font-size: 0.6em;
   }
 }
-@media only screen and (min-width: 1200px) {  
+@media only screen and (min-width: 1200px) {
 }
 .radio-buttons-container{
     display: flex;

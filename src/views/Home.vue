@@ -12,11 +12,11 @@ export default {
   components: {
     HelloWorld
   },
-  created(){
+  created () {
     // console.log('home created, userID: ' + this.$store.state.userId)
-    
+
     this.$store.commit('checkUserId')
-    if(this.$store.state.userId){
+    if (this.$store.state.userId) {
       this.$router.push('dashboard')
     } else {
       this.$router.push('login')
@@ -27,6 +27,3 @@ export default {
 <style scoped>
 img{height: 150px;}
 </style>
-
-
-
