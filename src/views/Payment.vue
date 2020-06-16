@@ -45,7 +45,7 @@
                 type="text"
                 class="form-control"
                 id="paidfrom"
-                placeholder="10"
+                placeholder="2020-05-15"
                 v-model="paymentData.paidfrom"
               />
             </div>
@@ -55,7 +55,7 @@
                 type="text"
                 class="form-control"
                 id="paiduntil"
-                placeholder="1000"
+                placeholder="2020-06-15"
                 v-model="paymentData.paiduntil"
               />
             </div>
@@ -102,55 +102,85 @@
 </template>
 
 <script>
-import Store from "../store.js";
+import Store from '../store.js'
+import datepicker from 'js-datepicker'
 export default {
-  created() {
-    this.$store.dispatch("asyncSetDate");
+  created () {
+    this.$store.dispatch('asyncSetDate')
   },
-  beforeRouteEnter(to, from, next) {
+  mounted () {
+    const paidFromPicker = datepicker('#paidfrom', {
+      onSelect: (instance, date) => {
+        this.paymentData.paidfrom = this.formatDate(date)
+      },
+      formatter: (input, date, instance) => {
+        input.value = this.formatDate(date) // => '2020-06-15'
+      }
+    })
+    const paidUntilPicker = datepicker('#paiduntil', {
+      onSelect: (instance, date) => {
+        this.paymentData.paiduntil = this.formatDate(date)
+      },
+      formatter: (input, date, instance) => {
+        input.value = this.formatDate(date) // => '2020-06-15'
+      }
+    })
+  },
+  beforeRouteEnter (to, from, next) {
     // console.log('this store: ',Store.state.userId)
     // if (Store.state.userId) {
     if (true) {
-      next();
+      next()
     } else {
-      next(false);
+      next(false)
     }
   },
-  data() {
+  data () {
     return {
       paymentData: {
-        clientid: "",
-        product: "",
-        amountusd: "",
-        paidfrom: "",
-        paiduntil: "",
-        timestamp: "",
-        isvalid: "",
-        exchangerate: "34.5",
-        currency: "",
-        comment: "",
-        extra: "",
-        branch: "",
-        dayofweek: ""
+        clientid: '',
+        product: '',
+        amountusd: '',
+        paidfrom: '',
+        paiduntil: '',
+        timestamp: '',
+        isvalid: '',
+        exchangerate: '34.5',
+        currency: '',
+        comment: '',
+        extra: '',
+        branch: '',
+        dayofweek: ''
       },
-      serverResponse: ""
-    };
+      serverResponse: ''
+    }
   },
   methods: {
-    payment() {
-      console.log(this.paymentData);
+    payment () {
+      console.log(this.paymentData)
     },
-    decimalControl() {
-      this.paymentData.amountusd = this.paymentData.amountusd.replace(",", ".");
+    decimalControl () {
+      this.paymentData.amountusd = this.paymentData.amountusd.replace(',', '.')
       this.paymentData.exchangerate = this.paymentData.exchangerate.replace(
-        ",",
-        "."
-      );
+        ',',
+        '.'
+      )
+    },
+    formatDate (date) {
+      return (
+        date.getFullYear() +
+        '-' +
+        (date.getMonth() + 1 < 10
+          ? '0' + (date.getMonth() + 1)
+          : date.getMonth() + 1) +
+        '-' +
+        (date.getDate() < 10 ? '0' + date.getDate() : date.getDate())
+      )
     }
   }
-};
+}
 </script>
-<style scoped>
+<style scoped lang="scss">
 .payment {
   padding: 30px 0;
 }

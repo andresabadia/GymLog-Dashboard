@@ -46,4 +46,8 @@ export default {
   background-color: #212121;
 }
 @import "~bootstrap/scss/bootstrap";
+@import "~js-datepicker/src/datepicker";
+.qs-active {
+  background: #ffab00;
+}
 </style>
