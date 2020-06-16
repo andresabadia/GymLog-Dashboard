@@ -64,5 +64,13 @@ export const routes = [
     meta: {
       title: 'Tutorials'
     }
+  },
+  {
+    path: '/payment',
+    name: 'payment',
+    component: () => import('./views/Payment.vue'),
+    meta: {
+      title: 'Payment'
+    }
   }
 ]

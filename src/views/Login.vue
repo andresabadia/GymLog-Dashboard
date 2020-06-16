@@ -6,20 +6,17 @@
           <div class="card-header">
             <h3>Login</h3>
             <div class="d-flex justify-content-end social_icon">
-              <span
-                ><img
-                  class="gymlog-logo"
-                  alt="GymLog logo"
-                  src="../assets/logo.png"
-              /></span>
+              <span>
+                <img class="gymlog-logo" alt="GymLog logo" src="../assets/logo.png" />
+              </span>
             </div>
           </div>
           <div class="card-body">
             <div class="input-group form-group">
               <div class="input-group-prepend">
-                <span class="input-group-text"
-                  ><i class="fas fa-user"></i
-                ></span>
+                <span class="input-group-text">
+                  <i class="fas fa-user"></i>
+                </span>
               </div>
               <input
                 type="text"
@@ -30,7 +27,9 @@
             </div>
             <div class="input-group form-group">
               <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                <span class="input-group-text">
+                  <i class="fas fa-key"></i>
+                </span>
               </div>
               <input
                 type="password"
@@ -45,27 +44,22 @@
                 style="font-size:inherit;
                     margin-left: 15px;"
                 v-model="rememberMe"
-              >
-                Recordame</CheckboxButtons
-              >
+              >Recordame</CheckboxButtons>
               <!-- <input type="checkbox">Remember Me -->
             </div>
             <div class="form-group">
-              <button
-                class="btn float-right btn-warning"
-                @click="login(username, pin)"
-              >
-                Login
-              </button>
+              <button class="btn float-right btn-warning" @click="login(username, pin)">Login</button>
             </div>
             <p class="card-text">{{ serverResponse }}</p>
           </div>
           <div class="card-footer">
             <div class="d-flex justify-content-center links">
-              <span
-                >Tenés problemas conectándote? Contactá al
-                <nobr><i class="fab fa-whatsapp"></i> 8778 6917</nobr></span
-              >
+              <span>
+                Tenés problemas conectándote? Contactá al
+                <nobr>
+                  <i class="fab fa-whatsapp"></i> 8778 6917
+                </nobr>
+              </span>
             </div>
           </div>
         </div>
