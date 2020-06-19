@@ -130,8 +130,8 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     // console.log('this store: ',Store.state.userId)
-    // if (Store.state.userId) {
-    if (true) {
+    if (Store.state.userId) {
+      // if (true) {
       next()
     } else {
       next(false)
@@ -176,7 +176,10 @@ export default {
         .then(res => {
           this.$store.commit('showLoading', false)
           toastr.success(
-            'Pago realizado: ' + res.data.firstName + ' ' + res.data.lastName
+            'Pago realizado: ' +
+              res.data.data.firstName +
+              ' ' +
+              res.data.data.lastName
           )
           this.resetForm()
           console.log(res)
