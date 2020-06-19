@@ -47,6 +47,7 @@ export default {
 }
 @import "~bootstrap/scss/bootstrap";
 @import "~js-datepicker/src/datepicker";
+@import "toastr";
 .qs-active {
   background: #ffab00;
 }

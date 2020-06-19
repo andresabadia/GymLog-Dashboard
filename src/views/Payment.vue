@@ -17,7 +17,7 @@
                 v-model="paymentData.clientid"
               />
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="product">Producto</label>
               <input
                 type="text"
@@ -26,7 +26,7 @@
                 placeholder="Online"
                 v-model="paymentData.product"
               />
-            </div>
+            </div>-->
             <div class="form-group">
               <label for="amountusd">Monto (USD)</label>
               <input
@@ -105,6 +105,7 @@
 import axios from 'axios'
 import Store from '../store.js'
 import datepicker from 'js-datepicker'
+import toastr from 'toastr'
 export default {
   created () {
     this.$store.dispatch('asyncSetDate')
@@ -129,8 +130,8 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     // console.log('this store: ',Store.state.userId)
-    if (Store.state.userId) {
-      // if (true) {
+    // if (Store.state.userId) {
+    if (true) {
       next()
     } else {
       next(false)
@@ -159,6 +160,7 @@ export default {
   },
   methods: {
     payment () {
+      this.$store.commit('showLoading', true)
       const paymentJSON = {
         gym_id: 'uf',
         clientid: this.paymentData.clientid,
@@ -169,11 +171,28 @@ export default {
         exchangerate: this.paymentData.exchangerate,
         comment: this.paymentData.comment
       }
-      //   console.log(paymentJSON);
       axios
         .post(this.paymentUrl, paymentJSON)
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+        .then(res => {
+          this.$store.commit('showLoading', false)
+          toastr.success(
+            'Pago realizado: ' + res.data.firstName + ' ' + res.data.lastName
+          )
+          this.resetForm()
+          console.log(res)
+        })
+        .catch(err => {
+          this.$store.commit('showLoading', false)
+          toastr.error(JSON.stringify(err))
+          console.log(err)
+        })
+    },
+    resetForm () {
+      this.paymentData.clientid = ''
+      this.paymentData.amountusd = ''
+      this.paymentData.paidfrom = ''
+      this.paymentData.paiduntil = ''
+      this.paymentData.comment = ''
     },
     decimalControl () {
       this.paymentData.amountusd = this.paymentData.amountusd.replace(',', '.')
