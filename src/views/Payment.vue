@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Store from '../store.js'
 import datepicker from 'js-datepicker'
 export default {
@@ -128,8 +129,8 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     // console.log('this store: ',Store.state.userId)
-    // if (Store.state.userId) {
-    if (true) {
+    if (Store.state.userId) {
+      // if (true) {
       next()
     } else {
       next(false)
@@ -138,13 +139,13 @@ export default {
   data () {
     return {
       paymentData: {
+        gym_id: 'uf',
         clientid: '',
         product: '',
         amountusd: '',
         paidfrom: '',
         paiduntil: '',
         timestamp: '',
-        isvalid: '',
         exchangerate: '34.5',
         currency: '',
         comment: '',
@@ -152,12 +153,27 @@ export default {
         branch: '',
         dayofweek: ''
       },
+      paymentUrl: 'https://www.id-ex.de/GymLog/php/online_payment.php',
       serverResponse: ''
     }
   },
   methods: {
     payment () {
-      console.log(this.paymentData)
+      const paymentJSON = {
+        gym_id: 'uf',
+        clientid: this.paymentData.clientid,
+        amountusd: this.paymentData.amountusd,
+        paidfrom: this.paymentData.paidfrom + ' 00:00:00.000',
+        paiduntil: this.paymentData.paiduntil + ' 00:00:00.000',
+        timestamp: this.formatDate(new Date()) + ' 00:00:00.000',
+        exchangerate: this.paymentData.exchangerate,
+        comment: this.paymentData.comment
+      }
+      //   console.log(paymentJSON);
+      axios
+        .post(this.paymentUrl, paymentJSON)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
     },
     decimalControl () {
       this.paymentData.amountusd = this.paymentData.amountusd.replace(',', '.')
