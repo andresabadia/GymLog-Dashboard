@@ -175,18 +175,22 @@ export default {
         .post(this.paymentUrl, paymentJSON)
         .then(res => {
           this.$store.commit('showLoading', false)
-          toastr.success(
-            'Pago realizado: ' +
-              res.data.data.firstName +
-              ' ' +
-              res.data.data.lastName
-          )
-          this.resetForm()
+          if (res.data.response === 'OK') {
+            toastr.success(
+              'Pago realizado: ' +
+                res.data.data.firstName +
+                ' ' +
+                res.data.data.lastName
+            )
+            this.resetForm()
+          } else {
+            toastr.error('Pago falló')
+          }
           console.log(res)
         })
         .catch(err => {
           this.$store.commit('showLoading', false)
-          toastr.error(JSON.stringify(err))
+          toastr.error('Pago falló')
           console.log(err)
         })
     },
