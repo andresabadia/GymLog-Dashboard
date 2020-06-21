@@ -13,7 +13,7 @@
                 type="text"
                 class="form-control"
                 id="clientId"
-                placeholder="1000"
+                placeholder="0"
                 v-model="paymentData.clientid"
               />
             </div>
@@ -175,6 +175,7 @@ export default {
         .post(this.paymentUrl, paymentJSON)
         .then(res => {
           this.$store.commit('showLoading', false)
+          console.log(res)
           if (res.data.response === 'OK') {
             toastr.success(
               'Pago realizado: ' +
@@ -184,9 +185,8 @@ export default {
             )
             this.resetForm()
           } else {
-            toastr.error('Pago falló')
+            toastr.error('Pago falló.')
           }
-          console.log(res)
         })
         .catch(err => {
           this.$store.commit('showLoading', false)
@@ -250,6 +250,9 @@ export default {
 input:focus {
   outline: 0 0 0 0 !important;
   box-shadow: 0 0 0 0 !important;
+}
+input::placeholder {
+  color: lightgrey !important;
 }
 
 .login_btn {
