@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.18.1",
     "bootstrap": "^4.5.0",
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "js-datepicker": "^5.14.2",
     "moment": "^2.24.0",
     "toastr": "^2.1.4",
